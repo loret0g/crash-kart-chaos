@@ -6,6 +6,7 @@ class Jugador {
     this.h = 75;
     this.w = 75;
     this.speed = 10;
+    this.isVulnerable = true;
 
     // Añadir jugador al DOM
     this.player = document.createElement("img");
