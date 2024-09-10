@@ -1,16 +1,19 @@
 //* ELEMENTOS PRINCIPALES DEL DOM
 
 // 3 pantallas
-const splashScreenNode = document.querySelector("#splash-screen")
-const gameScreenNode = document.querySelector("#game-screen")
-const gameOverScreenNode = document.querySelector("#game-over-screen")
+const splashScreenNode = document.querySelector("#splash-screen");
+const gameScreenNode = document.querySelector("#game-screen");
+const gameOverScreenNode = document.querySelector("#game-over-screen");
+
+// Elementos pantalla final
+let finalPoints = document.querySelector("#game-over-screen h2");
 
 // Botones de Iniciar y reiniciar
 const startBtnNode = document.querySelector("#start-btn")
 const restartBtnNode = document.querySelector("#restart-btn")
 
 // Game box
-const gameBoxNode = document.querySelector("#game-box")
+const gameBoxNode = document.querySelector("#game-box");
 
 // Puntos y vida
 let pointsNode = document.querySelector("#points");
@@ -19,7 +22,9 @@ let lifeNode = document.querySelector("#life");
 // 
 let player = null;
 let obstacles = [];
-let pointsItem = [];
+let applePoints = [];
+
+let maskBonusInvulnerable = null;  // Objeto para el bonus (máscara)
 
 let speedAppearanceObstacles = 1000;   //* Cambia este valor! Está modo rápido para ver bien las pruebas
 let speedPoints = 1000;      //* Cambia este valor! Está modo rápido para ver bien las pruebas
@@ -27,9 +32,13 @@ let speedPoints = 1000;      //* Cambia este valor! Está modo rápido para ver 
 let gameIntervalId = null;
 let obstacleIntervalId = null;
 let pointsIntervalId = null;
+let obstacleMissileIntervalId = null;
 
 // Variable global para modificar la velocidad del objeto Obstaculo y que haga efecto al subir de nivel a los nuevos objetos que se creen
-let speedObstacle = 2; 
+let speedObstacle = 2;
+
+//
+
 
 
 // Funciones:
@@ -54,6 +63,11 @@ function startGame() {
   pointsIntervalId = setInterval(() => {
     addPoints();
   }, speedPoints);
+
+  //! Intervalo de misiles    -- O lo añado aquí o en la línea 161
+  obstacleMissileIntervalId = setInterval(() => {
+    addObstacleMissile();
+  }, 1000);
 }
 
 function gameLoop() {
@@ -61,15 +75,21 @@ function gameLoop() {
   obstacles.forEach((eachObstacle) => {
     eachObstacle.obstacleMovement();
   });
-  obstacleLeaveScreen();
-  detectColission();
 
-  // Bonus -- Puntos por manzanas
-  pointsItem.forEach((eachItem) => {
+  obstacleLeaveScreen();
+  detectColissionObstacle();
+
+  // Bonus
+  applePoints.forEach((eachItem) => {
     eachItem.itemMovement();
   });
   itemLeaveScreen();
-  detectBonus();
+
+  detectColissionBonusApplePoints();
+  detectColissionBonusMaskInvulnerability();
+
+  
+
 }
 
 // Funciones del bonus (puntos)
@@ -78,23 +98,28 @@ function addPoints() {
   let randomPositionY = Math.floor( Math.random() * (470));  // Número aleatorio entre 0 y 470 (casi lo que mide el game-box)
 
   // Variable local para añadir al array global:
-  let newItem = new Bonus(randomPositionX, randomPositionY);    // Posición Y en 0 (desde arriba)
-  pointsItem.push(newItem);
+  let newItem = new Bonus(randomPositionX, randomPositionY, "points");    // Posición Y en 0 (desde arriba)
+  applePoints.push(newItem);
+}
+
+function addExtraBonus() {
+  let randomPositionY = Math.floor( Math.random() * (470));  // Número aleatorio en el eje Y
+  maskBonusInvulnerable = new Bonus(80, randomPositionY, "extra");    // Eje X a 80 (altura del player)
 }
 
 function itemLeaveScreen() {
-  if(pointsItem.length === 0) {
+  if(applePoints.length === 0) {
     return;
   }
 
-  if((pointsItem[0].x) <= 0) {         // Si el primer obstáculo sale de la pantalla (eje X)
-    pointsItem[0].bonus.remove();   // Lo elimino del DOM
-    pointsItem.shift();                // Y lo elimino de JS, eliminando el primer elemento del array
+  if((applePoints[0].x) <= 0) {         // Si el primer obstáculo sale de la pantalla (eje X)
+    applePoints[0].bonus.remove();      // Lo elimino del DOM
+    applePoints.shift();                // Y lo elimino de JS, eliminando el primer elemento del array
   } 
 }
 
-function detectBonus() {
-  pointsItem.forEach((eachItem, index) => {
+function detectColissionBonusApplePoints() {
+  applePoints.forEach((eachItem, index) => {
     if (
       player.x < eachItem.x + eachItem.w &&
       player.x + player.w > eachItem.x &&
@@ -102,29 +127,57 @@ function detectBonus() {
       player.y + player.h > eachItem.y
     ) {
         eachItem.bonus.remove();        // Lo elimino del DOM
-        pointsItem.splice(index, 1);    // Lo elimino del array
+        applePoints.splice(index, 1);   // Lo elimino del array
 
-        pointsNode.innerText ++;
-
-        // Subir dificultad cada 5 puntos
-        let currentPoints = parseInt(pointsNode.innerText);
-        if (currentPoints >= 5 && currentPoints % 5 === 0) {  // >= 5 porque sino me cambia la dificultad desde el inicio xD
-          console.log("Velocidad", speedObstacle, "Puntos: ", currentPoints);
-          addDifficult();
-        }
+        addScore();
     }
   });
+}
+
+function detectColissionBonusMaskInvulnerability() {
+  if(maskBonusInvulnerable === null) {
+    return;
+  }
+
+  if (
+    player.x < maskBonusInvulnerable.x + maskBonusInvulnerable.w &&
+    player.x + player.w > maskBonusInvulnerable.x &&
+    player.y < maskBonusInvulnerable.y + maskBonusInvulnerable.h &&
+    player.y + player.h > maskBonusInvulnerable.y
+  ) {
+    maskBonusInvulnerable.bonus.remove();
+    invulnerablePlayer(3000);
+  }
+}
+
+function addScore() {   //! Añado aquí los misiles en puntos múltiples de 7
+  pointsNode.innerText ++;
+
+  // Subir dificultad cada 5 puntos
+  let currentPoints = parseInt(pointsNode.innerText);
+  if (currentPoints % 5 === 0) {
+    console.log("%5 - Puntos: ", currentPoints);
+    addDifficult();
+  }
+  if (currentPoints % 7 === 0) {
+    console.log("%7 - Puntos: ", currentPoints);
+    // addObstacleMissile();
+  }
+
+  // Cada 10 puntos, bonus extra de invulnerabilidad, durante 3 segundos. 
+  if (currentPoints % 10 === 0) {
+    addExtraBonus();
+  }
 }
 
 // Funciones de obstáculos
 function addObstacle() {
   // Genero las posiciones fuera de la zona de exclusión (donde se encuentra el jugador) (mayor que 400px) 
-  //* Para la dificultad podría cambiar esto también, haciendo que aparezcan más cerca del jugador
   let randomPositionX = Math.floor(Math.random() * (870 - 400) + 400);  // Valor aleatorio entre 400px y 870px
   let randomPositionY = Math.floor( Math.random() * (470));  // Número aleatorio entre 0 y 470 (casi lo que mide el game-box)
 
   // Variable local para añadir al array global:
-  let newObstacle = new Obstacle(randomPositionX, randomPositionY);    // Posición Y en 0 (desde arriba)
+  let newObstacle = new Obstacle(randomPositionX, randomPositionY, "box");
   obstacles.push(newObstacle);
 }
 
@@ -139,7 +192,7 @@ function obstacleLeaveScreen() {
   } 
 }
 
-function detectColission() {
+function detectColissionObstacle() {
   obstacles.forEach((eachObstacle) => {
     if (
       player.x < eachObstacle.x + eachObstacle.w &&
@@ -161,26 +214,41 @@ function detectColission() {
         lifeNode.innerText --;
         eachObstacle.isCollided = true;  // Este obstáculo ya colisionó
 
-        // Efecto para saber que ha colisionado:
-        invulnerablePlayer();
+        // Efecto para saber que ha colisionado:  //todo Me gustaría mejorar el efecto
+        console.log("Colisiono")
+        invulnerablePlayer(2000);   // 2 segundos de invulnerabilidad
       }
-      
     }
   });
 }
 
-function invulnerablePlayer() {
-  player.player.style.opacity = "0.3";
-  player.isVulnerable = false;    // 
+function addObstacleMissile() {
+  let randomPositionX = gameBoxNode.offsetWidth;
+  let randomPositionY = Math.floor( Math.random() * (470));
 
-  setTimeout(() => {
-    player.isVulnerable = true;
-    player.player.style.opacity = "1";
-  }, 2000);
+  let newObstacleMissile = new Obstacle(randomPositionX, randomPositionY, "missile");
+  obstacles.push(newObstacleMissile);
 }
 
-function addDifficult() {
-  speedAppearanceObstacles -= 200;          
+function invulnerablePlayer(timeForInvulnerability) {   //todo Podría hacer un efecto diferente según si choca o tiene bonus
+  if (!player.isVulnerable) {
+    return;
+  }
+
+  player.player.style.opacity = "0.3";
+  player.isVulnerable = false;    // 
+  console.log("Soy transparente")
+
+  setTimeout(() => {
+    player.player.style.opacity = "1";
+    player.isVulnerable = true;
+    console.log("Ya no lo soy", timeForInvulnerability)
+    maskBonusInvulnerable = null;
+  }, timeForInvulnerability);
+}
+
+function addDifficult() {   // Se activa de 5 en 5 puntos
+  speedAppearanceObstacles -= 100;          
 
   // Nuevo intervalo de aparición de obstáculos:
   clearInterval(obstacleIntervalId);
@@ -188,38 +256,49 @@ function addDifficult() {
     addObstacle();
   }, speedAppearanceObstacles);
 
-  // Añadir velocidad a los obstáculos
-  speedObstacle += 1;
+  // Más velocidad a los obstáculos
+  speedObstacle += 0.5;
 }
-
-
 
 // Fin del juego
 function gameOver() {
-  alert("Fin")
   clearInterval(gameIntervalId);
   clearInterval(obstacleIntervalId);
   clearInterval(pointsIntervalId);
+  clearInterval(obstacleMissileIntervalId);
+
+  finalPoints.innerText = pointsNode.innerText;
 
   gameScreenNode.style.display = "none";
   gameOverScreenNode.style.display = "flex";
 }
 
 
-
 //* Eventos:
 startBtnNode.addEventListener("click", startGame);
 restartBtnNode.addEventListener("click", () => {
+
+  clearInterval(gameIntervalId);
+  clearInterval(obstacleIntervalId);
+  clearInterval(pointsIntervalId);
+  clearInterval(obstacleMissileIntervalId);
+
   gameBoxNode.innerHTML = "";   // Desaparece todo
+  gameBoxNode.innerText = ""; 
+
+  player = null;
+  obstacles = [];
+  applePoints = [];
+
+  pointsNode.innerText = "0";
+  currentPoints = 0;
+  lifeNode.innerText = "3";
+  speedObstacle = 2;
+
+  speedAppearanceObstacles = 1000;
 
   gameScreenNode.style.display = "flex";
   gameOverScreenNode.style.display = "none";
-
-
-  pointsNode.innerText = 0;
-  lifeNode.innerText = 3;
-
-  speedObstacle = 2; 
 
   startGame();
 
