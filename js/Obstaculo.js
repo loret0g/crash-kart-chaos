@@ -4,7 +4,7 @@ class Obstacle {
     this.y = positionY;     //* Valor dinámico, se asigna al crear el objeto
     this.w = 40;            //* Valor estático, siempre es igual
     this.h = 40;
-    this.speed = speedObstacle;
+    this.speed = speedObstacle; // Variable modificada en el main
     this.isCollided = false;   // Para saber si ha colisionado y no quitar todas las vidas de golpe
 
     // Al crear un obstáculo - Añadirlo al DOM 

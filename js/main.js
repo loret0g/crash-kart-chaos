@@ -26,8 +26,8 @@ let applePoints = [];
 
 let maskBonusInvulnerable = null;  // Objeto para el bonus (máscara)
 
-let speedAppearanceObstacles = 1000;   //* Cambia este valor! Está modo rápido para ver bien las pruebas
-let speedPoints = 1000;      //* Cambia este valor! Está modo rápido para ver bien las pruebas
+let speedAppearanceObstacles = 1000;   //! Cambia este valor! Está modo rápido para ver bien las pruebas
+let speedPoints = 1000;
 
 let gameIntervalId = null;
 let obstacleIntervalId = null;
@@ -36,10 +36,6 @@ let obstacleMissileIntervalId = null;
 
 // Variable global para modificar la velocidad del objeto Obstaculo y que haga efecto al subir de nivel a los nuevos objetos que se creen
 let speedObstacle = 2;
-
-//
-
-
 
 // Funciones:
 function startGame() {
@@ -150,7 +146,7 @@ function detectColissionBonusMaskInvulnerability() {
   }
 }
 
-function addScore() {   //! Añado aquí los misiles en puntos múltiples de 7
+function addScore() { 
   pointsNode.innerText ++;
 
   // Subir dificultad cada 5 puntos
@@ -158,10 +154,6 @@ function addScore() {   //! Añado aquí los misiles en puntos múltiples de 7
   if (currentPoints % 5 === 0) {
     console.log("%5 - Puntos: ", currentPoints);
     addDifficult();
-  }
-  if (currentPoints % 7 === 0) {
-    console.log("%7 - Puntos: ", currentPoints);
-    // addObstacleMissile();
   }
 
   // Cada 10 puntos, bonus extra de invulnerabilidad, durante 3 segundos. 

@@ -10,18 +10,15 @@
 
     <!-- PANTALLA DE INICIO -->
     <div id="splash-screen" class="container">
-      <!-- <img src="./images/logo.png" width="500" alt="logo"> -->
-       <div>
+      <div>
         <h1>Crash Kart Chaos</h1>
-        <!-- <img src="images/splash.jpg" alt="Foto de crash de fondo" id="img-splash"> -->
         <button id="start-btn" class="general-btn">Start!</button>
-       </div>
-       
+      </div>
     </div>
     
     <!-- PANTALLA DE JUEGO -->
-    <div id="game-screen" class="container">
-      <!-- Elementos del juego como puntuación, vidas, etc deberia ir aqui (dentro del game-screen pero fuera del game-box) -->
+    <div id="game-screen" class="container">  <!-- Elementos del juego como puntuación, vidas, etc deberia ir aqui (dentro del game-screen pero fuera del game-box) -->
+      
       <div id="game-box">
         <!-- Los elementos del juego serán añadidos desde JS con manipulación de DOM -->
       </div>
@@ -38,12 +35,16 @@
       </div>
     </div>
     
-    <!-- PANTALLA FINAL -->
-    <div id="game-over-screen" class="container">
-      <img src="./images/game-over.png" width="400" alt="logo">
-       <h1>Puntos totales: </h1>
-       <h2></h2>
-       <button id="restart-btn" class="general-btn">Reiniciar</button>
+    <!-- PANTALLA FINAL -->    
+    <div id="game-over-screen">
+      <div class="contenedor">
+        <img src="./images/game-over.png" alt="logo">
+        <div id="puntos-totales">
+          <h1>Puntos totales</h1>
+          <h2></h2>
+        </div>
+        <button id="restart-btn" class="general-btn">Reiniciar</button>
+      </div>
     </div>
   
 <script src="./js/main.js"></script>
