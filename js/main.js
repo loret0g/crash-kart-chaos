@@ -5,9 +5,6 @@ const splashScreenNode = document.querySelector("#splash-screen");
 const gameScreenNode = document.querySelector("#game-screen");
 const gameOverScreenNode = document.querySelector("#game-over-screen");
 
-// Elementos pantalla final
-let finalPoints = document.querySelector("#game-over-screen h2");
-
 // Botones de Iniciar y reiniciar
 const startBtnNode = document.querySelector("#start-btn")
 const restartBtnNode = document.querySelector("#restart-btn")
@@ -19,15 +16,21 @@ const gameBoxNode = document.querySelector("#game-box");
 let pointsNode = document.querySelector("#points");
 let lifeNode = document.querySelector("#life");
 
-// 
+// Puntos pantalla final
+let finalPoints = document.querySelector("#game-over-screen h2");
+
+// Objetos del game-box
 let player = null;
 let obstacles = [];
 let applePoints = [];
 
-let maskBonusInvulnerable = null;  // Objeto para el bonus (máscara)
+let maskBonusInvulnerable = null;  // Ítem para bonus invulverabilidad (máscara)
+let lifeExtraBonus = null;         // Ítem para vida extra
 
+// Velocidades para intervalos e intervalos
 let speedAppearanceObstacles = 1000;   //! Cambia este valor! Está modo rápido para ver bien las pruebas
 let speedPoints = 1000;
+let speedAppearanceObstaclesMissile = 1000;
 
 let gameIntervalId = null;
 let obstacleIntervalId = null;
@@ -37,13 +40,13 @@ let obstacleMissileIntervalId = null;
 // Variable global para modificar la velocidad del objeto Obstaculo y que haga efecto al subir de nivel a los nuevos objetos que se creen
 let speedObstacle = 2;
 
-// Funciones:
+//* Funciones:
 function startGame() {
   // 1. Cambiar las pantallas, ocultar la de inicio y mostrar la de juego:
   splashScreenNode.style.display = "none";
   gameScreenNode.style.display = "flex";
 
-  // 2. Añadir todos los elementos iniciales del juego:
+  // 2. Añadir jugador al inicio:
   player = new Jugador();
 
   // 3. Iniciar el intervalo del juego:
@@ -63,7 +66,7 @@ function startGame() {
   //! Intervalo de misiles    -- O lo añado aquí o en la línea 161
   obstacleMissileIntervalId = setInterval(() => {
     addObstacleMissile();
-  }, 1000);
+  }, speedAppearanceObstaclesMissile);
 }
 
 function gameLoop() {
@@ -80,9 +83,11 @@ function gameLoop() {
     eachItem.itemMovement();
   });
   itemLeaveScreen();
-
   detectColissionBonusApplePoints();
   detectColissionBonusMaskInvulnerability();
+
+  //! Función para detectar item para conseguir vidas
+  detectColissionBonusLife();
 
   
 
@@ -101,6 +106,11 @@ function addPoints() {
 function addExtraBonus() {
   let randomPositionY = Math.floor( Math.random() * (470));  // Número aleatorio en el eje Y
   maskBonusInvulnerable = new Bonus(80, randomPositionY, "extra");    // Eje X a 80 (altura del player)
+}
+
+function addExtraLife() {
+  let randomPositionY = Math.floor( Math.random() * (470));          // Número aleatorio en el eje Y
+  lifeExtraBonus = new Bonus(80, randomPositionY, "life");    // Eje X a 80 (altura del player)
 }
 
 function itemLeaveScreen() {
@@ -146,10 +156,30 @@ function detectColissionBonusMaskInvulnerability() {
   }
 }
 
+function detectColissionBonusLife() {
+  if(lifeExtraBonus === null) {
+    return;
+  }
+
+  if (
+    player.x < lifeExtraBonus.x + lifeExtraBonus.w &&
+    player.x + player.w > lifeExtraBonus.x &&
+    player.y < lifeExtraBonus.y + lifeExtraBonus.h &&
+    player.y + player.h > lifeExtraBonus.y
+  ) {
+    lifeExtraBonus.bonus.remove();
+
+    if (lifeExtraBonus.isCollided === false) {   
+      lifeNode.innerText ++;
+      lifeExtraBonus.isCollided = true;  // Colisionado (como se elimina el objeto.. cuando se vuelva a crear estará en false)
+    }
+  }
+}
+
 function addScore() { 
   pointsNode.innerText ++;
 
-  // Subir dificultad cada 5 puntos
+  // Cada 5 puntos, subir dificultad
   let currentPoints = parseInt(pointsNode.innerText);
   if (currentPoints % 5 === 0) {
     console.log("%5 - Puntos: ", currentPoints);
@@ -159,6 +189,11 @@ function addScore() {
   // Cada 10 puntos, bonus extra de invulnerabilidad, durante 3 segundos. 
   if (currentPoints % 10 === 0) {
     addExtraBonus();
+  }
+
+  // Cada 15 puntos, aparece item para una vida extra
+  if(currentPoints % 15 === 0) {
+    addExtraLife();
   }
 }
 
@@ -229,12 +264,10 @@ function invulnerablePlayer(timeForInvulnerability) {   //todo Podría hacer un 
 
   player.player.style.opacity = "0.3";
   player.isVulnerable = false;    // 
-  console.log("Soy transparente")
 
   setTimeout(() => {
     player.player.style.opacity = "1";
     player.isVulnerable = true;
-    console.log("Ya no lo soy", timeForInvulnerability)
     maskBonusInvulnerable = null;
   }, timeForInvulnerability);
 }

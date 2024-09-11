@@ -5,6 +5,7 @@ class Bonus {
     this.w = 30;
     this.h = 30;
     this.speed = 2;
+    this.isCollided = false;  // Bandera para saber si ha colisionado
 
     // Crear item (manzanas) que dan puntos y añadirlo al DOM
     this.bonus = document.createElement("img");
@@ -17,6 +18,10 @@ class Bonus {
       this.bonus.style.height = `${this.h}px`;
     } else if(type === "extra") {
       this.bonus.src = `./images/extra.png`;
+      this.bonus.style.width = `50px`;
+      this.bonus.style.height = `50px`;
+    } else if(type === "life") {
+      this.bonus.src = `./images/oro.webp`;
       this.bonus.style.width = `50px`;
       this.bonus.style.height = `50px`;
     }
