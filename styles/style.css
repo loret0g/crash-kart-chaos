@@ -9,7 +9,6 @@
 body {
   margin: 0;
   background-color: rgba(36, 112, 173, 0.772);
-  /* background-color: rgb(50, 50, 50); */
   font-family: "Luckiest Guy";
 }
 
@@ -67,6 +66,7 @@ body {
   color: rgb(45, 55, 70);
   padding: 10px;
   border-radius: 20px;
+  text-shadow: 2px 2px 4px #fff;
 }
 
 /** Pantalla de juego + Score */
@@ -78,7 +78,7 @@ body {
 
 #game-box {
   /* background-color: rgb(41, 36, 36); */
-  background-image: url("../images/fondo2.jfif");
+  background-image: url("../images/fondo3.png");
   background-position: center;
   background-size: cover;
   /* opacity: 0.8; */
@@ -90,17 +90,17 @@ body {
   user-select: none;  /* previene que los elementos del game-box sean resaltados al hacer click */
 }
 
-#score {
+.score {
   text-align: center;
   background-color: #FF9800;
-  padding: 10px;
+  /* padding: 10px; */
   border: 5px solid #000;
   border-radius: 15px;
-  width: 150px;
+  /* width: 150px; */
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
 }
 
-#score div {
+.score div {
   text-align: center;
   background-color: #ffaa2a;
   color: #000;
@@ -111,14 +111,14 @@ body {
   box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
-#score div p {
+.score div p {
   font-size: 25px;
   margin: 0;
   color: #fff;
-  text-shadow: 2px 2px 4px #000;    /** ACUERDATE DE ESTA PROPIEDAD PARA LA PANTALLA INICIAL */
+  text-shadow: 2px 2px 4px #000;
 }
 
-#score div #points, #score div p#life {   /* Super especificidad porque no me cogía los valores (se quedaba con el de arriba) */
+.score .marcador {   /* Especificidad porque no me cogía los valores (se quedaba con el de arriba) */
   font-size: 45px;
   color: #ee6323;
   background-color: rgba(247, 249, 122, 0.409);
@@ -165,14 +165,23 @@ body {
   border-radius: 10px;
   padding: 5px 10px;
   text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 #puntos-totales h1 {
-  /* font-size: 20px; */
-  /* color: #dfb733; */
+  text-shadow: 1px 1px 3px #fff;
 }
 
 #puntos-totales h2 {
-  /* font-size: 20px; */
   color: #dfb733;
+  font-size: 45px;
+  background-color: rgba(247, 249, 122, 0.409);
+  border-radius: 8px;
+  padding: 5px;
+  margin-top: 10px;
+  text-shadow: 3px 3px 6px #323232;
+  width: 220px;
 }

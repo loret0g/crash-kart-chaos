@@ -23,14 +23,14 @@
         <!-- Los elementos del juego serán añadidos desde JS con manipulación de DOM -->
       </div>
 
-      <div id="score">
+      <div class="score">
         <div>
           <p>Puntos</p>
-          <p id="points">0</p>
+          <p id="points" class="marcador">0</p>
         </div>
         <div>
           <p>Vidas</p>
-          <p id="life">3</p>
+          <p id="life" class="marcador">3</p>
         </div>
       </div>
     </div>
@@ -39,9 +39,9 @@
     <div id="game-over-screen">
       <div class="contenedor">
         <img src="./images/game-over.png" alt="logo">
-        <div id="puntos-totales">
+        <div id="puntos-totales" class="marcador">
           <h1>Puntos totales</h1>
-          <h2></h2>
+          <h2 class="marcador"></h2>
         </div>
         <button id="restart-btn" class="general-btn">Reiniciar</button>
       </div>
