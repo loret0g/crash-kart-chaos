@@ -128,6 +128,12 @@ body {
   text-shadow: 3px 3px 6px #323232;
 }
 
+#game-audio {
+  padding: 8px;
+  margin-bottom: 0;
+  /* background-color: #000; */
+}
+
 #game-box * {
   pointer-events: none; /* previene que todos los elementos del game-box sean arrastrados al clickar sobre ellos */
 }
@@ -184,4 +190,10 @@ body {
   margin-top: 10px;
   text-shadow: 3px 3px 6px #323232;
   width: 220px;
+}
+
+.mask-invulnerable {
+  /* background-color: #dfb733; */
+  filter: drop-shadow(0 0px 16px #0277bf);
+
 }

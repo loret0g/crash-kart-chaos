@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mini juego</title>
+  <link rel="shortcut icon" href="./images/favicon.webp" type="image/x-icon">
   <link rel="stylesheet" href="./styles/style.css">
 </head>
 <body>
@@ -32,7 +33,11 @@
           <p>Vidas</p>
           <p id="life" class="marcador">3</p>
         </div>
+        <audio src="./audio/game.mp3" controls id="game-audio"></audio>
       </div>
+
+      <audio src="./audio/invulnerable.mp3" id="mask-audio" preload="auto"></audio>
+      <audio src="./audio/life.mp3" id="life-audio" preload="auto"></audio>
     </div>
     
     <!-- PANTALLA FINAL -->    

@@ -23,12 +23,14 @@ let finalPoints = document.querySelector("#game-over-screen h2");
 let player = null;
 let obstacles = [];
 let applePoints = [];
+let bonusInvulnerable = []
+let bonusLife = [];
 
-let maskBonusInvulnerable = null;  // Ítem para bonus invulverabilidad (máscara)
-let lifeExtraBonus = null;         // Ítem para vida extra
+let maskBonusInvulnerable = null;  // Objeto => Ítem para bonus invulverabilidad (máscara)
+let lifeExtraBonus = null;         // Objeto => Ítem para vida extra
 
-// Velocidades para intervalos e intervalos
-let speedAppearanceObstacles = 1000;   //! Cambia este valor! Está modo rápido para ver bien las pruebas
+// Velocidades para intervalos e intervalos globales
+let speedAppearanceObstacles = 1000;
 let speedPoints = 1000;
 let speedAppearanceObstaclesMissile = 1000;
 
@@ -40,8 +42,25 @@ let obstacleMissileIntervalId = null;
 // Variable global para modificar la velocidad del objeto Obstaculo y que haga efecto al subir de nivel a los nuevos objetos que se creen
 let speedObstacle = 2;
 
-//* Funciones:
+// Elementos de audio:
+let startAudio = document.querySelector("#game-audio");
+let lostLifeAudio = document.querySelector("#life-audio");
+let bonusInvulnerableAudio = document.querySelector("#mask-audio");
+
+startAudio.volume = 0.3;
+lostLifeAudio.volume = 0.4;
+bonusInvulnerableAudio.volume = 0.4;
+
+startAudio.addEventListener("ended", () => {
+  // Cuando el audio termina, el siguiente loop inicia en el segundo 10
+  startAudio.currentTime = 10;
+  startAudio.play();
+});
+
+
+//* Funciones de inicio:
 function startGame() {
+  startAudio.play();
   // 1. Cambiar las pantallas, ocultar la de inicio y mostrar la de juego:
   splashScreenNode.style.display = "none";
   gameScreenNode.style.display = "flex";
@@ -63,7 +82,6 @@ function startGame() {
     addPoints();
   }, speedPoints);
 
-  //! Intervalo de misiles    -- O lo añado aquí o en la línea 161
   obstacleMissileIntervalId = setInterval(() => {
     addObstacleMissile();
   }, speedAppearanceObstaclesMissile);
@@ -84,16 +102,13 @@ function gameLoop() {
   });
   itemLeaveScreen();
   detectColissionBonusApplePoints();
+
   detectColissionBonusMaskInvulnerability();
-
-  //! Función para detectar item para conseguir vidas
   detectColissionBonusLife();
-
-  
 
 }
 
-// Funciones del bonus (puntos)
+//* Funciones del bonus (puntos)
 function addPoints() {
   let randomPositionX = Math.floor(Math.random() * (870 - 400) + 400);  // Valor aleatorio entre 400px y 870px
   let randomPositionY = Math.floor( Math.random() * (470));  // Número aleatorio entre 0 y 470 (casi lo que mide el game-box)
@@ -106,11 +121,13 @@ function addPoints() {
 function addExtraBonus() {
   let randomPositionY = Math.floor( Math.random() * (470));  // Número aleatorio en el eje Y
   maskBonusInvulnerable = new Bonus(80, randomPositionY, "extra");    // Eje X a 80 (altura del player)
+  bonusInvulnerable.push(maskBonusInvulnerable);
 }
 
 function addExtraLife() {
   let randomPositionY = Math.floor( Math.random() * (470));          // Número aleatorio en el eje Y
   lifeExtraBonus = new Bonus(80, randomPositionY, "life");    // Eje X a 80 (altura del player)
+  bonusLife.push(lifeExtraBonus);
 }
 
 function itemLeaveScreen() {
@@ -141,53 +158,62 @@ function detectColissionBonusApplePoints() {
 }
 
 function detectColissionBonusMaskInvulnerability() {
-  if(maskBonusInvulnerable === null) {
-    return;
-  }
+  bonusInvulnerable.forEach((eachItemBonusMask, index) => {
+    if (
+      player.x < eachItemBonusMask.x + eachItemBonusMask.w &&
+      player.x + player.w > eachItemBonusMask.x &&
+      player.y < eachItemBonusMask.y + eachItemBonusMask.h &&
+      player.y + player.h > eachItemBonusMask.y
+    ) {
+      if (eachItemBonusMask.isCollided === false) {
+        eachItemBonusMask.bonus.remove();         // Elimino del DOM
+        bonusInvulnerable.splice(index, 1);  // Eliminar del array
 
-  if (
-    player.x < maskBonusInvulnerable.x + maskBonusInvulnerable.w &&
-    player.x + player.w > maskBonusInvulnerable.x &&
-    player.y < maskBonusInvulnerable.y + maskBonusInvulnerable.h &&
-    player.y + player.h > maskBonusInvulnerable.y
-  ) {
-    maskBonusInvulnerable.bonus.remove();
-    invulnerablePlayer(3000);
-  }
+        bonusInvulnerableAudio.play();
+        invulnerablePlayer(3000);
+        eachItemBonusMask.isCollided = true;
+      }
+    }
+  });
 }
 
 function detectColissionBonusLife() {
-  if(lifeExtraBonus === null) {
-    return;
-  }
+  bonusLife.forEach((eachItemBonusLife, index) => {
+    if (
+      player.x < eachItemBonusLife.x + eachItemBonusLife.w &&
+      player.x + player.w > eachItemBonusLife.x &&
+      player.y < eachItemBonusLife.y + eachItemBonusLife.h &&
+      player.y + player.h > eachItemBonusLife.y
+    ) {
+      console.log("Cojo la vida");
+      if (eachItemBonusLife.isCollided === false) {
+        console.log(lifeNode.innerText);
 
-  if (
-    player.x < lifeExtraBonus.x + lifeExtraBonus.w &&
-    player.x + player.w > lifeExtraBonus.x &&
-    player.y < lifeExtraBonus.y + lifeExtraBonus.h &&
-    player.y + player.h > lifeExtraBonus.y
-  ) {
-    lifeExtraBonus.bonus.remove();
+        eachItemBonusLife.bonus.remove();         // Elimino del DOM
+        bonusLife.splice(index, 1);  // Eliminar del array
+        
+        let currentLives = parseInt(lifeNode.innerText);
+        lifeNode.innerText = currentLives + 1;
 
-    if (lifeExtraBonus.isCollided === false) {   
-      lifeNode.innerText ++;
-      lifeExtraBonus.isCollided = true;  // Colisionado (como se elimina el objeto.. cuando se vuelva a crear estará en false)
+        console.log(lifeNode.innerText);
+
+        eachItemBonusLife.isCollided = true;    // Colisionado (como se elimina el objeto.. cuando se vuelva a crear estará en false)
+      }
     }
-  }
+  });
 }
 
-function addScore() { 
+function addScore() {   //! CAMBIAR VALORES -- que estoy de pruebas
   pointsNode.innerText ++;
 
   // Cada 5 puntos, subir dificultad
   let currentPoints = parseInt(pointsNode.innerText);
   if (currentPoints % 5 === 0) {
-    console.log("%5 - Puntos: ", currentPoints);
     addDifficult();
   }
 
   // Cada 10 puntos, bonus extra de invulnerabilidad, durante 3 segundos. 
-  if (currentPoints % 10 === 0) {
+  if (currentPoints % 2 === 0) {
     addExtraBonus();
   }
 
@@ -197,7 +223,7 @@ function addScore() {
   }
 }
 
-// Funciones de obstáculos
+//* Funciones de obstáculos
 function addObstacle() {
   // Genero las posiciones fuera de la zona de exclusión (donde se encuentra el jugador) (mayor que 400px) 
   let randomPositionX = Math.floor(Math.random() * (870 - 400) + 400);  // Valor aleatorio entre 400px y 870px
@@ -219,7 +245,7 @@ function obstacleLeaveScreen() {
   } 
 }
 
-function detectColissionObstacle() {
+function detectColissionObstacle() {      //todo Modificando efecto
   obstacles.forEach((eachObstacle) => {
     if (
       player.x < eachObstacle.x + eachObstacle.w &&
@@ -228,6 +254,8 @@ function detectColissionObstacle() {
       player.y + player.h > eachObstacle.y
     ) {
       if (lifeNode.innerText === "0") {
+        startAudio.pause();
+        startAudio.currentTime = 0;
         gameOver();
       }
 
@@ -237,13 +265,13 @@ function detectColissionObstacle() {
 
       // Si ha colisionado, que no reste más vidas:
       if (eachObstacle.isCollided === false) {   
-        console.log("BOOM");
         lifeNode.innerText --;
         eachObstacle.isCollided = true;  // Este obstáculo ya colisionó
 
-        // Efecto para saber que ha colisionado:  //todo Me gustaría mejorar el efecto
-        console.log("Colisiono")
-        invulnerablePlayer(2000);   // 2 segundos de invulnerabilidad
+        lostLifeAudio.play();
+
+        // Efecto para saber que ha colisionado:
+        invulnerablePlayer(2000, "damaged");   // 2 segundos de invulnerabilidad
       }
     }
   });
@@ -257,15 +285,19 @@ function addObstacleMissile() {
   obstacles.push(newObstacleMissile);
 }
 
-function invulnerablePlayer(timeForInvulnerability) {   //todo Podría hacer un efecto diferente según si choca o tiene bonus
+function invulnerablePlayer(timeForInvulnerability, type) {   //todo Podría hacer un efecto diferente según si choca o tiene bonus
   if (!player.isVulnerable) {
     return;
   }
+
+  //! Voy a intentar cambiar la estética del player
+  player.player.classList.add("mask-invulnerable");
 
   player.player.style.opacity = "0.3";
   player.isVulnerable = false;    // 
 
   setTimeout(() => {
+    player.player.classList.remove("mask-invulnerable");
     player.player.style.opacity = "1";
     player.isVulnerable = true;
     maskBonusInvulnerable = null;
@@ -286,7 +318,7 @@ function addDifficult() {   // Se activa de 5 en 5 puntos
 }
 
 // Fin del juego
-function gameOver() {
+function gameOver() {   //! Que vuelvan a aparecer las pantallas
   clearInterval(gameIntervalId);
   clearInterval(obstacleIntervalId);
   clearInterval(pointsIntervalId);
@@ -294,8 +326,8 @@ function gameOver() {
 
   finalPoints.innerText = pointsNode.innerText;
 
-  gameScreenNode.style.display = "none";
-  gameOverScreenNode.style.display = "flex";
+  // gameScreenNode.style.display = "none";
+  // gameOverScreenNode.style.display = "flex";
 }
 
 
