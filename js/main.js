@@ -35,13 +35,14 @@ let newMissile = null;             // Objeto => Ítem para obtener misiles
 // Velocidades para intervalos e intervalos globales
 let speedAppearanceObstacles = 1000;
 let speedPoints = 1000;
-let speedAppearanceObstaclesMissile = 1000;
+let speedAppearanceObstaclesMissile = 1000;   //! Cambiarle el nombre para que sirva para el robot, o hacer otro
 let speedAppearanceBonusBoxMissile = 2000;
 
 let gameIntervalId = null;
 let obstacleIntervalId = null;
 let pointsIntervalId = null;
-let obstacleMissileIntervalId = null;
+let obstaclePlaneMissileIntervalId = null;
+let obstacleRobotBoxIntervalidId = null;
 let bonusShotMissileIntervalId = null;
 
 // Variable global para modificar la velocidad del objeto Obstaculo y que haga efecto al subir de nivel a los nuevos objetos que se creen
@@ -88,9 +89,13 @@ function startGame() {
     addPoints();
   }, speedPoints);
 
-  obstacleMissileIntervalId = setInterval(() => {
-    addObstacleMissile();
+  obstaclePlaneMissileIntervalId = setInterval(() => {
+    addObstaclePlaneMissile();
   }, speedAppearanceObstaclesMissile);
+
+  obstacleRobotBoxIntervalidId = setInterval(() => {    //! IMPLEMENTANDO
+    addObstacleRobotBox();
+  }, 3000);    //todo le cambio la velocidad a este??
 
   bonusShotMissileIntervalId = setInterval(() => {
     addBonusShotMissile();
@@ -306,8 +311,8 @@ function addScore() {
     addDifficult();
   }
 
-  // Cada 10 puntos, bonus extra de invulnerabilidad, durante 3 segundos. 
-  if (currentPoints % 2 === 0) {
+  // Cada 7 puntos, bonus extra de invulnerabilidad, durante 3 segundos. 
+  if (currentPoints % 7 === 0) {
     addExtraBonusInvulnerable();
   }
 
@@ -371,12 +376,20 @@ function detectColissionObstacle() {
   });
 }
 
-function addObstacleMissile() {
+function addObstaclePlaneMissile() {
   let randomPositionX = gameBoxNode.offsetWidth;
   let randomPositionY = Math.floor( Math.random() * (470));
 
   let newObstacleMissile = new Obstacle(randomPositionX, randomPositionY, "missile");
   obstacles.push(newObstacleMissile);
+}
+
+function addObstacleRobotBox() {
+  let randomPositionX = gameBoxNode.offsetWidth;
+  let randomPositionY = Math.floor( Math.random() * (470));
+
+  let newObstacleRobotBox = new Obstacle(randomPositionX, randomPositionY, "robot");
+  obstacles.push(newObstacleRobotBox);
 }
 
 function invulnerablePlayer(timeForInvulnerability, type) {
@@ -444,7 +457,7 @@ function gameOver() {
   clearInterval(gameIntervalId);
   clearInterval(obstacleIntervalId);
   clearInterval(pointsIntervalId);
-  clearInterval(obstacleMissileIntervalId);
+  clearInterval(obstaclePlaneMissileIntervalId);
   clearInterval(bonusShotMissileIntervalId);
 
   finalPoints.innerText = pointsNode.innerText;
@@ -460,7 +473,7 @@ restartBtnNode.addEventListener("click", () => {
   clearInterval(gameIntervalId);
   clearInterval(obstacleIntervalId);
   clearInterval(pointsIntervalId);
-  clearInterval(obstacleMissileIntervalId);
+  clearInterval(obstaclePlaneMissileIntervalId);
   clearInterval(bonusShotMissileIntervalId);
 
   gameBoxNode.innerHTML = "";   // Desaparece todo

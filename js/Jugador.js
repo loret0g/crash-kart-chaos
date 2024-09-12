@@ -8,7 +8,6 @@ class Jugador {
     this.isVulnerable = true;
 
     this.misilArray = [];
-    // this.misil = null;  // Objeto misil?
 
     // Añadir jugador al DOM
     this.player = document.createElement("img");
@@ -43,7 +42,6 @@ class Jugador {
 
   createMissile() {
     if(currentMissile > 0) {
-      console.log(`Tengo ${currentMissile} misiles`)
       currentMissile --;
       textMissileNode.innerText = currentMissile;
 

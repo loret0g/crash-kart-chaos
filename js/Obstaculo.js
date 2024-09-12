@@ -17,11 +17,14 @@ class Obstacle {
     } else if(type === "missile") {
       this.obstacle.src = `./images/obstacles/5.png`;
       this.speed = speedObstacle * 2;
+    } else if(type === "robot") {
+      this.obstacle.src = `./images/obstacles/robot-tnt.png`;
+      this.speed = speedObstacle * 2;
     }
 
     gameBoxNode.append(this.obstacle);
 
-    if(this.obstacle.src.includes("3.png")) {
+    if(this.obstacle.src.includes("3.png") || this.obstacle.src.includes("robot-tnt.png")) {
       this.w = 45;
       this.h = 55;
     } else if(this.obstacle.src.includes("5.png")) {

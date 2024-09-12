@@ -78,8 +78,7 @@ body {
 }
 
 #game-box {
-  /* background-color: rgb(41, 36, 36); */
-  background-image: url("../images/fondo3.png");
+  background-image: url("../images/fondo.png");
   background-position: center;
   background-size: cover;
   /* opacity: 0.8; */
