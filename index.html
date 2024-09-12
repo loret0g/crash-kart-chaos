@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mini juego</title>
+  <title>Crash Kart Chaos</title>
   <link rel="shortcut icon" href="./images/favicon.webp" type="image/x-icon">
   <link rel="stylesheet" href="./styles/style.css">
 </head>
@@ -19,25 +19,34 @@
     
     <!-- PANTALLA DE JUEGO -->
     <div id="game-screen" class="container">  <!-- Elementos del juego como puntuación, vidas, etc deberia ir aqui (dentro del game-screen pero fuera del game-box) -->
+
+      
       
       <div id="game-box">
         <!-- Los elementos del juego serán añadidos desde JS con manipulación de DOM -->
       </div>
 
       <div class="score">
-        <div>
+        <div id="bonus-box">
+          <!-- Contenido del bonus, añadido con JS -->
+           <img src="images/misiles.png" alt="misile icon">
+           <p>0</p>
+        </div>
+        <div class="shadow">
           <p>Puntos</p>
           <p id="points" class="marcador">0</p>
         </div>
-        <div>
+        <div class="shadow">
           <p>Vidas</p>
           <p id="life" class="marcador">3</p>
         </div>
         <audio src="./audio/game.mp3" controls id="game-audio"></audio>
-      </div>
+      </div>  <!-- .score -->
 
       <audio src="./audio/invulnerable.mp3" id="mask-audio" preload="auto"></audio>
       <audio src="./audio/life.mp3" id="life-audio" preload="auto"></audio>
+
+      
     </div>
     
     <!-- PANTALLA FINAL -->    
@@ -56,6 +65,7 @@
 <script src="./js/Jugador.js"></script>
 <script src="./js/Obstaculo.js"></script>
 <script src="./js/Bonus.js"></script>
+<script src="./js/Misil.js"></script>
 
 </body>
 </html>
