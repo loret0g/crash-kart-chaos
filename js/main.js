@@ -11,9 +11,11 @@ const restartBtnNode = document.querySelector("#restart-btn")
 
 // Game box
 const gameBoxNode = document.querySelector("#game-box");
+let backgroundPositionX = 0;
+let backgroundSpeed = 3;
 
 // Score panel - Bonus misil, puntos y vida
-let textMissileNode = document.querySelector("#bonus-box p");
+let textMissileNode = document.querySelector("#bonus-box span");
 let pointsNode = document.querySelector("#points");
 let lifeNode = document.querySelector("#life");
 
@@ -35,8 +37,9 @@ let newMissile = null;             // Objeto => Ítem para obtener misiles
 // Velocidades para intervalos e intervalos globales
 let speedAppearanceObstacles = 1000;
 let speedPoints = 1000;
-let speedAppearanceObstaclesMissile = 1000;   //! Cambiarle el nombre para que sirva para el robot, o hacer otro
-let speedAppearanceBonusBoxMissile = 2000;
+let speedAppearanceObstaclePlaneMissile = 1000;
+let speedAppearanceObstacleRobotBox = 2000;
+let speedAppearanceBonusBoxMissile = 3000;
 
 let gameIntervalId = null;
 let obstacleIntervalId = null;
@@ -58,44 +61,37 @@ startAudio.volume = 0.3;
 lostLifeAudio.volume = 0.4;
 bonusInvulnerableAudio.volume = 0.4;
 
-startAudio.addEventListener("ended", () => {
-  // Cuando el audio termina, el siguiente loop inicia en el segundo 10
-  startAudio.currentTime = 10;
-  startAudio.play();
-});
-
-
 //* Funciones de inicio:
 function startGame() {
   startAudio.play();
-  // 1. Cambiar las pantallas, ocultar la de inicio y mostrar la de juego:
+  // Cambiar las pantallas, ocultar la de inicio y mostrar la de juego:
   splashScreenNode.style.display = "none";
   gameScreenNode.style.display = "flex";
 
-  // 2. Añadir jugador al inicio:
+  // Añadir jugador al inicio:
   player = new Jugador();
 
-  // 3. Iniciar el intervalo del juego:
+  // Iniciar el intervalo del juego:
   gameIntervalId = setInterval(() => {
     gameLoop();
   }, Math.round(1000 / 60));  // 60fps
 
-  // 4. Intervalo de aparición de obstáculos, en los que poder cambiar la frecuencia para subir el nivel
+  // Intervalos de aparición de obstáculos, puntos y bonus en los que poder cambiar la frecuencia para subir el nivel
   obstacleIntervalId = setInterval(() => {
     addObstacle();
   }, speedAppearanceObstacles);
 
+  obstaclePlaneMissileIntervalId = setInterval(() => {
+    addObstaclePlaneMissile();
+  }, speedAppearanceObstaclePlaneMissile);
+
+  obstacleRobotBoxIntervalidId = setInterval(() => {
+    addObstacleRobotBox();
+  }, speedAppearanceObstacleRobotBox);
+
   pointsIntervalId = setInterval(() => {
     addPoints();
   }, speedPoints);
-
-  obstaclePlaneMissileIntervalId = setInterval(() => {
-    addObstaclePlaneMissile();
-  }, speedAppearanceObstaclesMissile);
-
-  obstacleRobotBoxIntervalidId = setInterval(() => {    //! IMPLEMENTANDO
-    addObstacleRobotBox();
-  }, 3000);    //todo le cambio la velocidad a este??
 
   bonusShotMissileIntervalId = setInterval(() => {
     addBonusShotMissile();
@@ -103,11 +99,12 @@ function startGame() {
 }
 
 function gameLoop() {
+  moveBackgroundImage();
+
   // Obstáculos
   obstacles.forEach((eachObstacle) => {
     eachObstacle.obstacleMovement();
   });
-
   obstacleLeaveScreen();
   detectColissionObstacle();
 
@@ -132,7 +129,17 @@ function gameLoop() {
   });
   missileLeaveScreen();
   detectColissionMissileWithObstacles();
+}
 
+//* Mover el fondo del game-box
+function moveBackgroundImage() {
+  backgroundPositionX -= backgroundSpeed;
+
+  if (backgroundPositionX <= -900) {  // Cuando llega al final de la imagen, vuelve a 0
+    backgroundPositionX = 0;
+  }
+
+  gameBoxNode.style.backgroundPosition = `${backgroundPositionX}px`;
 }
 
 //* Funciones de bonus (puntos / invulnerabilidad / vidas extra / misiles)
@@ -241,17 +248,12 @@ function detectColissionBonusLife() {
       player.y < eachItemBonusLife.y + eachItemBonusLife.h &&
       player.y + player.h > eachItemBonusLife.y
     ) {
-      console.log("Cojo la vida");
       if (eachItemBonusLife.isCollided === false) {
-        console.log(lifeNode.innerText);
-
-        eachItemBonusLife.bonus.remove();         // Elimino del DOM
-        bonusLife.splice(index, 1);  // Eliminar del array
+        eachItemBonusLife.bonus.remove();
+        bonusLife.splice(index, 1);
         
         let currentLives = parseInt(lifeNode.innerText);
         lifeNode.innerText = currentLives + 1;
-
-        console.log(lifeNode.innerText);
 
         eachItemBonusLife.isCollided = true;    // Colisionado (como se elimina el objeto.. cuando se vuelva a crear estará en false)
       }
@@ -259,7 +261,7 @@ function detectColissionBonusLife() {
   });
 }
 
-function detectColissionBonusBoxMissile() {    //todo ¿¿AUDIO PARA CUANDO COJA BONUS??
+function detectColissionBonusBoxMissile() {
   bonusBoxMissile.forEach((eachBoxMissile, index) => {
     if (
       player.x < eachBoxMissile.x + eachBoxMissile.w &&
@@ -276,8 +278,6 @@ function detectColissionBonusBoxMissile() {    //todo ¿¿AUDIO PARA CUANDO COJA
         textMissileNode.innerText = currentMissile;
 
         eachBoxMissile.isCollided = true;
-
-        // lostLifeAudio.play();
       }
     }
   });
@@ -443,7 +443,7 @@ function addDifficult() {   //* Se activa cada 5 puntos
     addObstacle();
   }, speedAppearanceObstacles);
 
-  // Las cajas bonus (de misiles) aparecen más tarde
+  // Las cajas bonus [!] (de misiles) aparecen más tarde
   speedAppearanceBonusBoxMissile += 1000;
 
   clearInterval(bonusShotMissileIntervalId);
@@ -458,6 +458,7 @@ function gameOver() {
   clearInterval(obstacleIntervalId);
   clearInterval(pointsIntervalId);
   clearInterval(obstaclePlaneMissileIntervalId);
+  clearInterval(obstacleRobotBoxIntervalidId);
   clearInterval(bonusShotMissileIntervalId);
 
   finalPoints.innerText = pointsNode.innerText;
@@ -474,6 +475,7 @@ restartBtnNode.addEventListener("click", () => {
   clearInterval(obstacleIntervalId);
   clearInterval(pointsIntervalId);
   clearInterval(obstaclePlaneMissileIntervalId);
+  clearInterval(obstacleRobotBoxIntervalidId);
   clearInterval(bonusShotMissileIntervalId);
 
   gameBoxNode.innerHTML = "";   // Desaparece todo
@@ -489,6 +491,7 @@ restartBtnNode.addEventListener("click", () => {
   speedObstacle = 2;
 
   speedAppearanceObstacles = 1000;
+  speedAppearanceBonusBoxMissile = 3000;
 
   gameScreenNode.style.display = "flex";
   gameOverScreenNode.style.display = "none";

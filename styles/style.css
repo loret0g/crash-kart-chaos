@@ -79,9 +79,8 @@ body {
 
 #game-box {
   background-image: url("../images/fondo.png");
-  background-position: center;
+  background-position: 0;
   background-size: cover;
-  /* opacity: 0.8; */
   width: 900px;
   height: 500px;
 
@@ -118,6 +117,11 @@ body {
   color: #000;
   margin: 0;
 }
+#bonus-box span {
+  /* font-size: 25px; */
+  color: #22a12b;
+  margin-right: 10px;
+}
 
 .score div {
   text-align: center;
@@ -149,8 +153,6 @@ body {
 
 #game-audio {
   padding: 8px;
-  margin-bottom: 0;
-  /* background-color: #000; */
 }
 
 #game-box * {
