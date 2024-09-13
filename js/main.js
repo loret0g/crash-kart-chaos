@@ -1,9 +1,10 @@
 //* ELEMENTOS PRINCIPALES DEL DOM
 
-// 3 pantallas
+// 4 pantallas
 const splashScreenNode = document.querySelector("#splash-screen");
 const gameScreenNode = document.querySelector("#game-screen");
 const gameOverScreenNode = document.querySelector("#game-over-screen");
+const winnerScreenNode = document.querySelector("#winner");
 
 // Botones de Iniciar y reiniciar
 const startBtnNode = document.querySelector("#start-btn")
@@ -34,6 +35,8 @@ let maskBonusInvulnerable = null;  // Objeto => Ítem para bonus invulverabilida
 let lifeExtraBonus = null;         // Objeto => Ítem para vida extra
 let newMissile = null;             // Objeto => Ítem para obtener misiles
 
+let itemWinner = null;
+
 // Velocidades para intervalos e intervalos globales
 let speedAppearanceObstacles = 1000;
 let speedPoints = 1000;
@@ -56,10 +59,12 @@ let currentMissile = 0;
 let startAudio = document.querySelector("#game-audio");
 let lostLifeAudio = document.querySelector("#life-audio");
 let bonusInvulnerableAudio = document.querySelector("#mask-audio");
+let winnerAudio = document.querySelector("#winner-audio");
 
 startAudio.volume = 0.3;
 lostLifeAudio.volume = 0.4;
 bonusInvulnerableAudio.volume = 0.4;
+winnerAudio.volume = 0.4;
 
 //* Funciones de inicio:
 function startGame() {
@@ -129,9 +134,15 @@ function gameLoop() {
   });
   missileLeaveScreen();
   detectColissionMissileWithObstacles();
+
+  // Item para ganar, se activa a los 50 puntos
+  if (itemWinner) {
+    itemWinner.winnerMovement();
+    detectColissionItemWinner();
+  }
+  
 }
 
-//* Mover el fondo del game-box
 function moveBackgroundImage() {
   backgroundPositionX -= backgroundSpeed;
 
@@ -168,7 +179,7 @@ function addBonusShotMissile() {
   let randomPositionX = Math.floor(Math.random() * (870 - 400) + 400);
   let randomPositionY = Math.floor( Math.random() * (470));
 
-  newMissile = new Bonus(randomPositionX, randomPositionY, "missile");    // Posición Y en 0 (desde arriba)
+  newMissile = new Bonus(randomPositionX, randomPositionY, "missile");
   bonusBoxMissile.push(newMissile);
 }
 
@@ -320,6 +331,30 @@ function addScore() {
   if(currentPoints % 15 === 0) {
     addExtraLife();
   }
+
+  // Item para ganar
+  if(currentPoints === 50) {
+    addItemWinner();
+  }
+}
+
+//* Función del item para ganar el juego
+function addItemWinner() {
+  let positionX = gameBoxNode.offsetWidth - 100;
+  let randomPositionY = Math.floor( Math.random() * (470));
+
+  itemWinner = new Bonus(positionX, randomPositionY, "winner");
+}
+
+function detectColissionItemWinner() {
+  if (
+    player.x < itemWinner.x + itemWinner.w &&
+    player.x + player.w > itemWinner.x &&
+    player.y < itemWinner.y + itemWinner.h &&
+    player.y + player.h > itemWinner.y
+  ) {
+    winner();
+  }
 }
 
 //* Funciones de obstáculos
@@ -452,6 +487,21 @@ function addDifficult() {   //* Se activa cada 5 puntos
   }, speedAppearanceBonusBoxMissile);
 }
 
+function winner() {
+  clearInterval(gameIntervalId);
+  clearInterval(obstacleIntervalId);
+  clearInterval(pointsIntervalId);
+  clearInterval(obstaclePlaneMissileIntervalId);
+  clearInterval(obstacleRobotBoxIntervalidId);
+  clearInterval(bonusShotMissileIntervalId);
+
+  startAudio.pause();
+  winnerAudio.play();
+
+  gameScreenNode.style.display = "none";
+  winnerScreenNode.style.display = "flex";
+}
+
 //* Fin del juego
 function gameOver() {
   clearInterval(gameIntervalId);
@@ -486,8 +536,10 @@ restartBtnNode.addEventListener("click", () => {
   applePoints = [];
 
   pointsNode.innerText = "0";
-  currentPoints = 0;
   lifeNode.innerText = "3";
+  currentPoints = 0;
+  textMissileNode.innerText = "0";
+  currentMissile = 0;
   speedObstacle = 2;
 
   speedAppearanceObstacles = 1000;

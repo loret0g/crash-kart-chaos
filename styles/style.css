@@ -217,3 +217,24 @@ body {
   filter: drop-shadow(0 0px 16px #0277bf);
 }
 
+#winner {
+  display: none;
+  height: 100vh;
+  background-image: url("../images/winner.jpg");
+  background-position: center;
+  background-size:contain;
+  background-repeat: no-repeat;
+  background-color: #000000c2;
+  justify-content: center;
+  align-items: end;
+}
+
+#winner h1 {
+  font-size: 50px;
+  background-color: #0277bfeb;
+  padding: 20px;
+  border-radius: 8px;
+  color: #FFF;
+  text-shadow: 6px 6px 6px #000;
+  letter-spacing: 8px;
+}

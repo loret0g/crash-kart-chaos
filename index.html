@@ -29,7 +29,6 @@
       <div class="score">
         <div id="bonus-box">
            <img src="images/misiles.png" alt="misile icon">
-           <p></p>
            <p>x<span>0</span> misiles</p>
         </div>
         <div class="shadow">
@@ -46,6 +45,7 @@
 
       <audio src="./audio/invulnerable.mp3" id="mask-audio" preload="auto"></audio>
       <audio src="./audio/life.mp3" id="life-audio" preload="auto"></audio>
+      <audio src="./audio/winner.mp3" id="winner-audio" preload="auto"></audio>
 
       
     </div>
@@ -61,6 +61,13 @@
         <button id="restart-btn" class="general-btn">Reiniciar</button>
       </div>
     </div>
+
+    <!-- Pantalla ganador máximo - a los 50 puntos -->
+     <div id="winner">
+      <div>
+        <h1>¡HAS GANADO!</h1>
+      </div>
+     </div>
   
 <script src="./js/main.js"></script>
 <script src="./js/Jugador.js"></script>
