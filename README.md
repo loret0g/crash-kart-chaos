@@ -42,8 +42,3 @@ Minijuego inspirado en el universo de Crash Bandicoot, donde controlas a **Crash
    **Lanzamiento de misiles**:
   - **Destruye el primer obstáculo que encuentra a su paso**
 
-
-
-# Backlog Functionalities
-
-- List here all functionalities you wish to add to your proyect later.
