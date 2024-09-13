@@ -4,7 +4,7 @@ NOTE: to copy this readme structure simply click on `Raw` on the top right of th
 
 ## [¡Juega!](https://loret0g.github.io/crash-kart-chaos/)
 
-![Game Logo](./images/extra.png)(./images/favicon.webp)
+![Game Logo](./images/extra.png)![Game Logo](./images/favicon.webp)
 
 
 # Descripción
