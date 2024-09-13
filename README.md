@@ -1,10 +1,8 @@
-NOTE: to copy this readme structure simply click on `Raw` on the top right of this gist. There you have the content in the basic [Markdown syntax](https://www.markdownguide.org/basic-syntax/) used in readme files. Then paste it on a README.md file in your repository and fill the information. Always do this directly from VS code, not from github. DON'T ADD THIS NOTE TO YOUR README.
-
 # Crash Kart Chaos
 
 ## [¡Juega!](https://loret0g.github.io/crash-kart-chaos/)
 
-![Game Logo](./images/extra.png)![Game Logo](./images/favicon.webp)
+<!-- ![Game Logo](./images/extra.png)![Game Logo](./images/favicon.webp) -->
 
 
 # Descripción
@@ -14,18 +12,30 @@ Add a simple description of your game here.
 
 # Funcionalidades
 
-- List here the main functionalities your game will have.
+ - **Invulnerabilidad temporal**: 
+     - Después de chocar con un obstáculo, el coche es invulnerable por 2 segundos.
+   - **Máscara Aku Aku**: 
+     - Al llegar a 7 puntos, aparece un item de la máscara Aku Aku, que otorga invulnerabilidad por 3 segundos.
+   - **Vida Extra**: 
+     - Al alcanzar los 15 puntos, aparece un item que te proporciona una vida extra.
+   - **Item de victoria**: 
+     - Al llegar a 50 puntos, un item especial aparece desde la derecha y se queda a la altura del jugador. Si lo recoges, habrás ganado el juego.
+
+ - **Dificultad creciente**:
+   - A medida que avanzas en el juego, los obstáculos aparecerán con mayor frecuencia y a mayor velocidad, aumentando la dificultad.
+
+
 
 # Backlog Functionalities
 
 - List here all functionalities you wish to add to your proyect later.
 
-# Technologies used
+# Tecnologías utilizadas
 
-- HTML
-- CSS
-- Javascript
-- DOM Manipulation
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white) 
+![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white) 
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) 
+
 
 # States
 
