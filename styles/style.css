@@ -1,23 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
 
-.luckiest-guy-regular {
-  font-family: "Luckiest Guy", 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-body {
+* {
   margin: 0;
-  background-color: rgba(36, 112, 173, 0.772);
-  font-family: "Luckiest Guy";
+  padding: 0;
+  box-sizing: border-box;
 }
 
-#img-splash {
-  width: 300px;
+/* ====== BODY / HTML ====== */
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: "Luckiest Guy", Arial, sans-serif;
+  font-size: 16px;
+  overflow: hidden;
+  background-color: #0f1e46e2;
 }
 
+/* ====== BOTONES ====== */
 .general-btn {
-  font-family: "Luckiest Guy";
+  font-family: "Luckiest Guy", Arial, sans-serif;
   background-color: rgb(208, 44, 44);
   color: white;
   padding: 20px 30px;
@@ -27,6 +28,7 @@ body {
   width: 200px;
   border: none;
   cursor: pointer;
+  text-align: center;
 }
 .general-btn:hover {
   background-color: rgb(153, 38, 38);
@@ -39,21 +41,22 @@ body {
   background-color: rgb(0, 51, 103);
 }
 
-.container {
+/* ====== PANTALLA DE INICIO ====== */
+#splash-screen {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 50px;
+  width: 100vw;
+  height: 100vh;
 }
-
-#splash-screen div {
+#splash-screen > div {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 700px;
-  height: 450px;
+  width: 90%;
+  max-width: 700px;
+  aspect-ratio: 16 / 9;
   border-radius: 10px;
   background-image: url("../images/splash.jpg");
   background-position: center;
@@ -61,180 +64,382 @@ body {
 }
 
 #splash-screen h1 {
+  padding: 0.5em;
+  border-radius: 10px;
   background-color: rgba(36, 112, 173, 0.772);
-  font-size: 60px;
   color: rgb(45, 55, 70);
-  padding: 10px;
-  border-radius: 20px;
   text-shadow: 2px 2px 4px #fff;
 }
 
-/** Pantalla de juego + Score */
+/* ====== PANTALLA DE JUEGO ====== */
 #game-screen {
-  flex-direction: row;
-  /* flex-direction: row; */
+  display: flex; 
+  flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: flex-start;
+  width: 100vw;
+  height: 100vh;
+}
+
+.game-centerer {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+#game-box-wrap {
+  width: 90%;
+  max-width: 1200px; 
+  aspect-ratio: 16 / 9;
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
 
 #game-box {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  /* Evitar que se seleccionen los elementos: */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  /* FONDO */
   background-image: url("../images/fondo.png");
-  background-position: 0;
+  background-position: center center;
   background-size: cover;
-  width: 900px;
-  height: 500px;
-
-  position: relative; /* permite posicionar los elementos de forma absoluta dentro del game-box */
-  overflow: hidden;   /* previene que los elementos salgan visualmente del game-box */
-  user-select: none;  /* previene que los elementos del game-box sean resaltados al hacer click */
-
+  overflow: hidden;
 }
 
+/* ====== SCORE ====== */
 .score {
-  text-align: center;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
   background-color: #FF9800;
   border: 5px solid #000;
   border-radius: 15px;
-  /* width: 150px; */
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-}
-
-#bonus-box {
-  display: flex;  /* CAMBIAR A FLEX CUANDO SE COJA EL ITEM */
-  background-color: #FFF;
-  height: 20px;
-  justify-content: center;
-  gap: 20px;
-  text-shadow: none;
-}
-
-#bonus-box img {
-  height: 25px;
-}
-
-#bonus-box p {
-  font-size: 20px;
-  color: #000;
-  margin: 0;
-}
-#bonus-box span {
-  /* font-size: 25px; */
-  color: #22a12b;
-  margin-right: 10px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 0.5rem;
 }
 
 .score div {
   text-align: center;
   background-color: #ffaa2a;
-  color: #000;
-  padding: 10px;
-  margin: 10px;
   border: 3px solid #FFF;
   border-radius: 10px;
-  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 4px 8px rgba(0,0,0,0.5);
+  padding: 10px;
+  margin: 10px;
+  flex: 1;
 }
-
-.score .shadow p {
-  font-size: 25px;
+.score div p {
   margin: 0;
-  color: #fff;
-  text-shadow: 2px 2px 4px #000;
+  font-size: 16px;
+}
+.score .marcador {
+  font-size: 1.5rem;
+  color: #000;
+  background-color: rgba(255,255,255,0.8);
+  border-radius: 5px;
+  padding: 0.2rem 0.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
-.score .marcador {   /* Especificidad porque no me cogía los valores (se quedaba con el de arriba) */
-  font-size: 45px;
-  color: #ee6323;
-  background-color: rgba(247, 249, 122, 0.409);
-  border-radius: 8px;
-  padding: 5px;
-  margin-top: 15px;
-  text-shadow: 3px 3px 6px #323232;
+/* Botón mute */
+#mute-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 0.5rem;
+}
+#mute-btn img {
+  width: 30px;
+  height: 30px;
+  transition: transform 0.2s ease;
+}
+#mute-btn:hover img {
+  transform: scale(1.1);
 }
 
-#game-audio {
-  padding: 8px;
-}
-
-#game-box * {
-  pointer-events: none; /* previene que todos los elementos del game-box sean arrastrados al clickar sobre ellos */
-}
-
-#game-screen, #game-over-screen {
-  display: none;
-}
-
-/** Pantalla Game Over */
+/* ====== PANTALLA GAME OVER ====== */
 #game-over-screen {
+  width: 100vw;
+  height: 100vh;
   background-image: url("../images/screen-final.jfif");
   background-position: center;
   background-size: cover;
-  height: 100vh;
+  display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-#game-over-screen img {
-  width: 300px;
+#game-over-screen .contenedor {
+  background-color: rgba(36,112,173,0.772);
+  padding: 1rem;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  text-align: center;
 }
 
-#game-over-screen .contenedor {
-  background-color: rgba(36, 112, 173, 0.772);
-  padding: 30px;
-  margin: 20px;
-  border-radius: 10px;
-  width: 500px;
-  text-align: center;
+#game-over-screen img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 1rem;
 }
 
 #puntos-totales {
-  background-color: rgba(105, 151, 188, 0.6);
+  background-color: rgba(105,151,188,0.6);
   border-radius: 10px;
   padding: 5px 10px;
   text-align: center;
-
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
 #puntos-totales h1 {
   text-shadow: 1px 1px 3px #fff;
 }
-
 #puntos-totales h2 {
   color: #dfb733;
   font-size: 45px;
-  background-color: rgba(247, 249, 122, 0.409);
+  background-color: rgba(247,249,122,0.409);
   border-radius: 8px;
   padding: 5px;
   margin-top: 10px;
   text-shadow: 3px 3px 6px #323232;
-  width: 220px;
+  width: 90%;
+  max-width: 220px;
 }
 
+/* ====== PANTALLA WINNER ====== */
+#winner {
+  display: none;
+  width: 100vw;
+  height: 100vh;
+  background-image: url("../images/winner.jpg");
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: #000000c2;
+  justify-content: center;
+  align-items: flex-end;
+}
+#winner h1 {
+  font-size: 2rem;
+  background-color: #0277bfeb;
+  padding: 1rem;
+  border-radius: 10px;
+  color: #FFF;
+  text-shadow: 4px 4px 6px #000;
+  letter-spacing: 4px;
+}
+
+/* ====== Bonus máscara INVULNERABILIDAD ====== */
 .mask-invulnerable {
   filter: drop-shadow(0 0px 16px #0277bf);
 }
 
-#winner {
+/* ====== AVISO GIRAR para disp. móviles ====== */
+#rotate-device-alert {
   display: none;
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 9999;
+  width: 100vw;
   height: 100vh;
-  background-image: url("../images/winner.jpg");
-  background-position: center;
-  background-size:contain;
-  background-repeat: no-repeat;
-  background-color: #000000c2;
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  font-size: 1.8rem;
+  text-align: center;
+  padding: 1rem;
+  align-items: center;
   justify-content: center;
-  align-items: end;
 }
 
-#winner h1 {
-  font-size: 50px;
-  background-color: #0277bfeb;
-  padding: 20px;
-  border-radius: 8px;
-  color: #FFF;
-  text-shadow: 6px 6px 6px #000;
-  letter-spacing: 8px;
+/* MÓVIL VERTICAL => aviso */
+@media screen and (max-width: 767px) and (orientation: portrait) {
+  body.is-mobile #rotate-device-alert {
+    display: flex;
+  }
+  body.is-mobile #game-screen,
+  body.is-mobile #splash-screen,
+  body.is-mobile #game-over-screen,
+  body.is-mobile #winner {
+    display: none !important;
+  }
+}
+
+/* ========== MÓVIL HORIZONTAL (≤900px) ========== */
+@media screen and (max-width: 900px) and (orientation: landscape) {
+  #game-screen {
+    flex-direction: row;
+    align-items: stretch; /* Para que el contenedor del juego tome todo el alto */
+  }
+
+  /* .game-centerer debe tomar el espacio sobrante */
+  .game-centerer {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+  }
+
+  /* #game-box-wrap ocupará todo el espacio vertical del .game-centerer */
+  #game-box-wrap {
+    flex: 1;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .score {
+    display: none;
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: auto;
+    transform: scale(0.8);
+    transform-origin: top right;
+    background-color: #FF9800f2;
+    flex-direction: row;
+    z-index: 999;
+  }
+  .score div {
+    margin: 5px;
+    padding: 5px;
+  }
+  .score div img {
+    max-height: 25px;
+  }
+  .score .marcador {
+    font-size: 1rem;
+  }
+  
+  /* Imagen 'game over' pantalla final */
+  .contenedor img {
+    width: 250px;
+    height: 250px;
+  }
+
+  /* ========== Botones en disp. móvil ========== */
+  #controls-container {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    align-items: center;
+    gap: 20px;
+    z-index: 1000;
+  }
+
+  /* Botón de disparo estilo arcade */
+  .control-btn {
+    width: 70px;
+    height: 70px;
+    border: none;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #ff5555, #c00);
+    border: 2px solid #900;
+    box-shadow: 0 5px 0 #900;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    cursor: pointer;
+  }
+  
+  /* Clase para simular el efecto de pulsado */
+  .control-btn.pressed {
+    transform: translateY(5px);
+    box-shadow: 0 0 0 #900;
+  }
+
+  /* Contenedor del joystick */
+  #joystick-container {
+    width: 80px;
+    height: 80px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    position: relative;
+    touch-action: none;  /* Evita que el navegador maneje gestos por defecto */
+  }
+
+  /* Elemento interno del joystick */
+  #joystick {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* ========== PORTÁTIL (901px to 1199px) ========== */
+@media screen and (min-width: 901px) and (max-width: 1199px) {
+  /* El .score => a la derecha en columna */
+  #game-screen {
+    flex-direction: row; 
+  }
+  .game-centerer {
+    flex: 1;
+    width: auto;
+  }
+  #game-box-wrap {
+    width: 80%;
+    max-width: 80%;
+    aspect-ratio: 16/9;
+    height: auto;
+  }
+  .score {
+    flex-direction: column; 
+    justify-content: flex-start;
+    align-items: center;
+    width: 10%;
+    max-width: none;
+    margin: 0 2rem 0 0;
+  }
+}
+
+/* ========== DESKTOP (≥1200px) ========== */
+@media screen and (min-width: 1200px) {
+  /* Score abajo */
+  #game-screen {
+    flex-direction: column;
+  }
+  .game-centerer {
+    flex: 1;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+  #game-box-wrap {
+    width: 90%;
+    max-width: 1200px;
+    aspect-ratio: 16 / 9;
+    margin: 0 auto;
+  }
+  .score {
+    width: 100%;
+    margin: 0.5em auto;
+    display: flex;
+    flex-direction: row;
+  }
+  .score div {
+    height: 6rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.8rem;
+  }
 }
