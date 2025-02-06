@@ -43,5 +43,4 @@ class Obstacle {
     this.x -= this.speed;
     this.obstacle.style.left = `${this.x}px`;
   }
-
 }
