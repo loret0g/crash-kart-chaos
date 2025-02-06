@@ -563,10 +563,10 @@ joystickContainer.addEventListener("touchmove", (e) => {
     joystickInterval = null;
   }
 
-  const threshold = 10; // umbral para iniciar el movimiento
+  const threshold = 5; // umbral para iniciar el movimiento
   if (Math.abs(deltaY) > threshold) {
     const direction = deltaY < 0 ? "top" : "down";
-    const movementFactor = Math.abs(deltaY) / maxRadius; // valor entre 0 y 1
+    const movementFactor = (Math.abs(deltaY) / maxRadius) + 0.5;
 
     joystickInterval = setInterval(() => {
       if (player) {
@@ -580,7 +580,7 @@ joystickContainer.addEventListener("touchmove", (e) => {
         player.y = Math.max(0, Math.min(player.y, gameBoxHeight - playerHeight));
         player.player.style.top = `${player.y}px`;
       }
-    }, 50); //! Intervalo que sigo ajustando para mejor fluidez
+    }, 20); //! Intervalo que sigo ajustando para mejor fluidez
   }
 });
 
