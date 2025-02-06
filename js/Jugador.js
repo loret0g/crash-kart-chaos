@@ -6,7 +6,6 @@ class Jugador {
     this.h = 75;
     this.speed = 15;
     this.isVulnerable = true;
-
     this.misilArray = [];
 
     // Añadir jugador al DOM
@@ -17,39 +16,55 @@ class Jugador {
     // Dimensiones y posición:
     this.player.style.width = `${this.w}px`;
     this.player.style.height = `${this.h}px`;
-    this.player.style.position = "absolute";  // Para ajustar el top y el left en su padre (que es relative)
+    this.player.style.position = "absolute";  // Posición absoluta para poder moverlo dentro del contenedor
     this.player.style.top = `${this.y}px`;
     this.player.style.left = `${this.x}px`;
   }
 
   playerMovement(direction) {
-      const gameBoxHeight = 500;  // Altura del área de juego
-    
-      if (direction === "top" && this.y > 0) {    // Comprobamos que y no sea menor que 0
-        this.y -= this.speed;
-        if (this.y < 0) {  // Si la velocidad hace que se pase del borde, la ajustamos a 0
-          this.y = 0;
-        }
-        this.player.style.top = `${this.y}px`;
-      } else if (direction === "down" && this.y + this.h < gameBoxHeight) {   // Comprobamos que no sobrepase el borde inferior
-        this.y += this.speed;
-        if (this.y + this.h > gameBoxHeight) {  // Si la velocidad hace que se pase, lo ajustamos al borde
-          this.y = gameBoxHeight - this.h;
-        }
-        this.player.style.top = `${this.y}px`;
-      }
+    const gameBoxHeight = gameBoxNode.clientHeight;   // Obtener la altura actual del contenedor de juego
+    const playerHeight = this.player.clientHeight;    // Altura real del jugador, que puede ser igual a this.h o modificada por CSS
+
+    // Definir márgenes de seguridad (safe margins) para evitar que el jugador se acerque demasiado a los bordes.
+    let safeMarginTop = 0;
+    let safeMarginBottom = 0;
+
+    // Ajustar los márgenes según el tamaño del viewport
+    if (window.innerHeight < 400) {
+      safeMarginTop = 40;
+      safeMarginBottom = 40;
+    } else if (window.innerHeight < 800) {
+      safeMarginTop = 60;
+      safeMarginBottom = 60;
+    } else {
+      safeMarginTop = 0;
+      safeMarginBottom = 0;
+    }
+
+    // Actualizar la posición según la dirección (arriba o abajo)
+    if (direction === "top") {
+      this.y -= this.speed;
+    } else if (direction === "down") {
+      this.y += this.speed;
+    }
+
+    // Limitar la posición para que el jugador no se salga del área de juego:
+    // Se utiliza Math.max y Math.min junto con los safe margins para mantenerlo dentro de los límites.
+    this.y = Math.max(safeMarginTop, Math.min(this.y, gameBoxHeight - playerHeight - safeMarginBottom));
+
+    // Actualizar la posición en el DOM
+    this.player.style.top = `${this.y}px`;
   }
 
   createMissile() {
-    if(currentMissile > 0) {
-      currentMissile --;
+    if (currentMissile > 0) {
+      currentMissile--;
       textMissileNode.innerText = currentMissile;
 
-      let newMissile = new Misil(this.y);    // Objeto misil que añado al array
+      // Crear un nuevo objeto Misil, se pasa la posición vertical actual (donde se encuentra el jugador)
+      let newMissile = new Misil(this.y);
       this.misilArray.push(newMissile);
-
       newMissile.moveMissile();
     }
   }
-
 }
