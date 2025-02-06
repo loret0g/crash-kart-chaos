@@ -1,4 +1,4 @@
-class Misil {
+class Misille {
   constructor(positionY) {
     this.x = 60;
     this.y = positionY;

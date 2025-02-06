@@ -62,7 +62,7 @@ class Player {
       textMissileNode.innerText = currentMissile;
 
       // Crear un nuevo objeto Misil, se pasa la posición vertical actual (donde se encuentra el jugador)
-      let newMissile = new Misil(this.y);
+      let newMissile = new Missille(this.y);
       this.misilArray.push(newMissile);
       newMissile.moveMissile();
     }
