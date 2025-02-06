@@ -1,4 +1,4 @@
-class Jugador {
+class Player {
   constructor() {
     this.x = 60;
     this.y = 220;

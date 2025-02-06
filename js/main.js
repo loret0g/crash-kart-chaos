@@ -77,7 +77,7 @@ function startGame() {
   startAudio.play();
 
   // Crear jugador
-  player = new Jugador();
+  player = new Player();
 
   // Intervalo principal (60 fps)
   gameIntervalId = setInterval(gameLoop, 1000 / 60);
