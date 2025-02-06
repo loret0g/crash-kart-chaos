@@ -5,10 +5,14 @@
 
 # Descripción
 
-Minijuego inspirado en el universo de Crash Bandicoot, donde controlas a **Crash**, que puede moverse hacia arriba y hacia abajo. Tu misión es esquivar obstáculos mientras recoges las manzanas que te darán puntos. Recoge las cajas bonus para obtener misiles con los que destruir a los enemigos y avanzar lo máximo posible mientras la dificultad crece a medida que progresas. A lo largo del juego, desbloquearás poderosos items, como la máscara Aku Aku, vidas extras y el item de victoria cuando alcances 50 puntos.
+Minijuego inspirado en el universo de Crash Bandicoot, en el que controlas a **Crash** para esquivar obstáculos y recoger objetos bonus que te otorgan puntos, misiles y vidas extras. La dificultad aumenta conforme avanzas, y al llegar a 50 puntos aparece un ítem especial que, si se recoge, te declara ganador.
 
+**¡Ahora es responsive!**  
+El juego se adapta a ordenadores, tablets y dispositivos móviles. Además, se han incorporado controles táctiles intuitivos:
+- **Joystick virtual** para mover a Crash hacia arriba y abajo.
+- **Botón de disparo estilo arcade** para lanzar misiles.
 
-
+También se incluye un sistema de detección de dispositivos móviles que añade la clase `is-mobile` al `<body>` y muestra un aviso de rotación cuando el dispositivo está en orientación portrait.
 
 ## [¡Juega ya!](https://loret0g.github.io/crash-kart-chaos/)
 
@@ -29,6 +33,7 @@ Minijuego inspirado en el universo de Crash Bandicoot, donde controlas a **Crash
   **Objetos bonus**:
   - **Cajas bonus [!]**: 
       - Cajas en movimiento con las que se obtienen 3 misiles.
+      - Lanza misiles para destruir el primer obstáculo que encuentren en su camino.
   - **Invulnerabilidad**: 
       - Al llegar a 7 puntos, aparece un item que otorga invulnerabilidad por 3 segundos.
   - **Vida Extra**: 
@@ -39,6 +44,14 @@ Minijuego inspirado en el universo de Crash Bandicoot, donde controlas a **Crash
    **Dificultad creciente**:
   - **A medida que avanzas en el juego, los obstáculos aparecerán con mayor frecuencia y a mayor velocidad, aumentando la dificultad.**
     
-   **Lanzamiento de misiles**:
-  - **Destruye el primer obstáculo que encuentra a su paso**
+### Responsive y Controles Móviles
+- **Diseño Responsive:**  
+  La interfaz se adapta a diferentes tamaños de pantalla mediante un diseño flexible.
+- **Controles táctiles:**  
+  En dispositivos móviles se muestran en pantalla un joystick virtual para el movimiento y un botón de disparo.
+- **Detección móvil y aviso de rotación:**  
+  Se usa un script para detectar dispositivos móviles y mostrar un aviso si el dispositivo está en orientación portrait.
 
+### Audio
+- **Mute/Unmute:**  
+  Un botón permite alternar el audio, actualizando el icono según el estado.
