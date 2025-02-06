@@ -1,79 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Crash Kart Chaos</title>
   <link rel="shortcut icon" href="./images/favicon.webp" type="image/x-icon">
-  <link rel="stylesheet" href="./styles/style.css">
+  <link rel="stylesheet" href="./styles/style.css"/>
 </head>
 <body>
+  <!-- PANTALLA DE INICIO -->
+  <div id="splash-screen">
+    <div>
+      <h1>Crash Kart Chaos</h1>
+      <button id="start-btn" class="general-btn">Start!</button>
+    </div>
+  </div>
 
-    <!-- PANTALLA DE INICIO -->
-    <div id="splash-screen" class="container">
+  <!-- PANTALLA DE JUEGO -->
+  <div id="game-screen">
+    <div class="game-centerer">
+      <div id="game-box-wrap">
+        <div id="game-box">
+          <!-- Elementos del juego generados con JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Scoreboard -->
+    <div class="score">
       <div>
-        <h1>Crash Kart Chaos</h1>
-        <button id="start-btn" class="general-btn">Start!</button>
+        <p>Misiles</p>
+        <p class="marcador"><span>0</span></p>
       </div>
-    </div>
-    
-    <!-- PANTALLA DE JUEGO -->
-    <div id="game-screen" class="container">  <!-- Elementos del juego como puntuación, vidas, etc deberia ir aqui (dentro del game-screen pero fuera del game-box) -->
-
-      
-      
-      <div id="game-box">
-        <!-- Los elementos del juego serán añadidos desde JS con manipulación de DOM -->
-      </div>
-
-      <div class="score">
-        <div id="bonus-box">
-           <img src="images/misiles.png" alt="misile icon">
-           <p>x<span>0</span> misiles</p>
-        </div>
-        <div class="shadow">
-          <p>Puntos</p>
-          <p id="points" class="marcador">0</p>
-        </div>
-        <div class="shadow">
-          <p>Vidas</p>
-          <p id="life" class="marcador">3</p>
-        </div>
-        
-        <audio src="./audio/game.mp3" controls loop id="game-audio"></audio>
-      </div>  <!-- .score -->
-
-      <audio src="./audio/invulnerable.mp3" id="mask-audio" preload="auto"></audio>
-      <audio src="./audio/life.mp3" id="life-audio" preload="auto"></audio>
-      <audio src="./audio/winner.mp3" id="winner-audio" preload="auto"></audio>
-
-      
-    </div>
-    
-    <!-- PANTALLA FINAL -->    
-    <div id="game-over-screen">
-      <div class="contenedor">
-        <img src="./images/game-over.png" alt="logo">
-        <div id="puntos-totales" class="marcador">
-          <h1>Puntos totales</h1>
-          <h2 class="marcador"></h2>
-        </div>
-        <button id="restart-btn" class="general-btn">Reiniciar</button>
-      </div>
-    </div>
-
-    <!-- Pantalla ganador máximo - a los 50 puntos -->
-     <div id="winner">
       <div>
-        <h1>¡HAS GANADO!</h1>
+        <p>Puntos</p>
+        <p id="points" class="marcador">0</p>
       </div>
-     </div>
-  
-<script src="./js/main.js"></script>
-<script src="./js/Jugador.js"></script>
-<script src="./js/Obstaculo.js"></script>
-<script src="./js/Bonus.js"></script>
-<script src="./js/Misil.js"></script>
+      <div>
+        <p>Vidas</p>
+        <p id="life" class="marcador">3</p>
+      </div>
+      <!-- Botón mute -->
+      <button id="mute-btn" aria-label="Mute/Unmute">
+        <img src="images/sound-on.png" alt="Sound icon" id="sound-icon">
+      </button>
+    </div>
 
+    <!-- Controles para dispositivos móviles -->
+    <div id="controls-container">
+      <button id="shoot-btn" class="control-btn"></button>
+      <div id="joystick-container">
+        <div id="joystick"></div>
+      </div>
+    </div>
+
+    <!-- Audios -->
+    <audio src="./audio/game.mp3" id="game-audio" loop></audio>
+    <audio src="./audio/invulnerable.mp3" id="mask-audio" preload="auto"></audio>
+    <audio src="./audio/life.mp3" id="life-audio" preload="auto"></audio>
+    <audio src="./audio/winner.mp3" id="winner-audio" preload="auto"></audio>
+  </div>
+
+  <!-- PANTALLA FINAL -->
+  <div id="game-over-screen">
+    <div class="contenedor">
+      <img src="./images/game-over.png" alt="Game Over">
+      <div id="puntos-totales" class="marcador">
+        <h1>Puntos totales</h1>
+        <h2 class="marcador"></h2>
+      </div>
+      <button id="restart-btn" class="general-btn">Reiniciar</button>
+    </div>
+  </div>
+
+  <!-- PANTALLA DE VICTORIA -->
+  <div id="winner">
+    <div>
+      <h1>¡HAS GANADO!</h1>
+    </div>
+  </div>
+
+  <!-- AVISO DE ROTACIÓN -->
+  <div id="rotate-device-alert">
+    <p>Por favor, gira tu dispositivo para jugar.</p>
+  </div>
+
+  <!-- Scripts -->
+  <script src="./js/responsive-mobile.js"></script>
+  <script src="./js/audio.js"></script>
+  <script src="./js/Jugador.js"></script>
+  <script src="./js/Obstaculo.js"></script>
+  <script src="./js/Bonus.js"></script>
+  <script src="./js/Misil.js"></script>
+  <script src="./js/main.js"></script>
 </body>
 </html>
