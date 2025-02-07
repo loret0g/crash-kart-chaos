@@ -508,24 +508,24 @@ window.addEventListener("keydown", (event) => {
   }
 });
 
-//* Movimiento para la versión móvil
+///* Movimiento para la versión móvil usando requestAnimationFrame (fluido y natural)
 const controlsContainer = document.querySelector("#controls-container");
 const joystickContainer = document.querySelector("#joystick-container");
 const joystick = document.querySelector("#joystick");
 const shootBtn = document.querySelector("#shoot-btn");
 
-// Variable para el intervalo que permite mover el jugador de forma continua
-let joystickInterval = null;
+// Variable para almacenar el desplazamiento vertical actual del joystick
+let touchDeltaY = 0;
 // Objeto para guardar el centro del contenedor del joystick
 let containerCenter = { x: 0, y: 0 };
+// Bandera para indicar que se está interactuando con el joystick
+let isTouchActive = false;
 
-// Función para reestablecer el joystick (visualmente y deteniendo el movimiento)
+// Función para reestablecer el joystick (visualmente y reseteando la variable)
 function resetJoystick() {
-  joystick.style.transform = "translate(-50%, -50%)"; // Vuelve a centrar el elemento
-  if (joystickInterval) {
-    clearInterval(joystickInterval);
-    joystickInterval = null;
-  }
+  joystick.style.transform = "translate(-50%, -50%)";
+  isTouchActive = false;
+  touchDeltaY = 0;
 }
 
 // Al iniciar el toque, se guarda la posición central del contenedor
@@ -536,9 +536,10 @@ joystickContainer.addEventListener("touchstart", (e) => {
     x: rect.left + rect.width / 2,
     y: rect.top + rect.height / 2,
   };
+  isTouchActive = true;
 });
 
-// Mientras se mueve el toque (drag) sobre el contenedor
+// Mientras se mueve el toque (drag) sobre el contenedor, se actualiza el visual y se almacena el delta vertical
 joystickContainer.addEventListener("touchmove", (e) => {
   e.preventDefault();
   const touch = e.touches[0];
@@ -554,37 +555,14 @@ joystickContainer.addEventListener("touchmove", (e) => {
     deltaY *= ratio;
   }
   
-  // Mueve el joystick visualmente
+  // Actualiza el movimiento visual del joystick
   joystick.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-
-  // Limpia el intervalo previo (si existe)
-  if (joystickInterval) {
-    clearInterval(joystickInterval);
-    joystickInterval = null;
-  }
-
-  const threshold = 5; // umbral para iniciar el movimiento
-  if (Math.abs(deltaY) > threshold) {
-    const direction = deltaY < 0 ? "top" : "down";
-    const movementFactor = (Math.abs(deltaY) / maxRadius) + 0.5;
-
-    joystickInterval = setInterval(() => {
-      if (player) {
-        // Calcula la velocidad ajustada en función del factor y la velocidad base
-        const adjustedSpeed = player.speed * movementFactor;
-        // Modifica la posición del jugador directamente:
-        player.y += (direction === "down" ? adjustedSpeed : -adjustedSpeed);
-        // Asegura que el jugador no se salga de los límites del gameBox:
-        const gameBoxHeight = gameBoxNode.clientHeight;
-        const playerHeight = player.player.clientHeight;
-        player.y = Math.max(0, Math.min(player.y, gameBoxHeight - playerHeight));
-        player.player.style.top = `${player.y}px`;
-      }
-    }, 20); //! Intervalo que sigo ajustando para mejor fluidez
-  }
+  
+  // Se guarda el desplazamiento vertical para actualizar la posición del jugador
+  touchDeltaY = deltaY;
 });
 
-// Al finalizar o cancelar el toque, se restablece el joystick y se detiene el movimiento
+// Al finalizar o cancelar el toque, se resetea el joystick y se detiene el movimiento
 joystickContainer.addEventListener("touchend", (e) => {
   e.preventDefault();
   resetJoystick();
@@ -594,9 +572,33 @@ joystickContainer.addEventListener("touchcancel", (e) => {
   resetJoystick();
 });
 
+// Bucle de animación que actualiza la posición del jugador en cada frame
+function updatePlayerPosition() {
+  if (player && isTouchActive) {
+    const threshold = 5; // Umbral para evitar movimientos muy pequeños
+    if (Math.abs(touchDeltaY) > threshold) {
+      // Factor de sensibilidad para ajustar la velocidad
+      const sensitivity = 0.2;
+      // Calcula el incremento de posición en función del delta y la sensibilidad
+      let increment = touchDeltaY * sensitivity;
+      
+      // Actualiza la posición vertical del jugador
+      player.y += increment;
+      
+      // Limitar la posición para que no se salga del área del juego
+      const gameBoxHeight = gameBoxNode.clientHeight;
+      const playerHeight = player.player.clientHeight;
+      player.y = Math.max(0, Math.min(player.y, gameBoxHeight - playerHeight));
+      player.player.style.top = `${player.y}px`;
+    }
+  }
+  requestAnimationFrame(updatePlayerPosition);
+}
+// Inicia el bucle de animación
+updatePlayerPosition();
+
 //* Botón de disparo con efecto de pulsación táctil
 if (shootBtn) {
-  // Cuando se inicia el toque, se añade la clase 'pressed' para el efecto visual
   shootBtn.addEventListener("touchstart", (e) => {
     e.preventDefault();
     shootBtn.classList.add("pressed");
@@ -604,7 +606,6 @@ if (shootBtn) {
       player.createMissile();
     }
   });
-  // Al finalizar o cancelar el toque, se elimina la clase para restablecer el estilo
   shootBtn.addEventListener("touchend", (e) => {
     e.preventDefault();
     shootBtn.classList.remove("pressed");
