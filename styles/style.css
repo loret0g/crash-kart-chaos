@@ -281,7 +281,7 @@ html, body {
 }
 
 /* ========== MÓVIL HORIZONTAL (≤900px) ========== */
-@media screen and (max-width: 900px) and (orientation: landscape) {
+@media screen and (max-width: 990px) and (orientation: landscape) {
   #game-screen {
     flex-direction: row;
     align-items: stretch; /* Para que el contenedor del juego tome todo el alto */
