@@ -2,8 +2,9 @@ class Player {
   constructor() {
     this.x = 60;
     this.y = 220;
-    this.w = 75;
-    this.h = 75;
+    // Aplicar scaleFactor para dimensiones responsive
+    this.w = 75 * scaleFactor;  // 75 es la dimensión base
+    this.h = 75 * scaleFactor;  // 75 es la dimensión base
     this.speed = 15;
     this.isVulnerable = true;
     this.misilArray = [];

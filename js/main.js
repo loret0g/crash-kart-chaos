@@ -22,6 +22,13 @@ let lifeNode = document.querySelector("#life");
 // Puntos pantalla final
 let finalPoints = document.querySelector("#game-over-screen h2");
 
+// Define un ancho base para el escalado
+const baseWidth = 1200;
+// Ancho actual del contenedor del juego
+const currentWidth = gameBoxNode.clientWidth;
+// Calculo del factor de escala
+const scaleFactor = currentWidth / baseWidth;
+
 // Objetos del game-box
 let player = null;
 let obstacles = [];
@@ -52,6 +59,11 @@ let bonusShotMissileIntervalId = null;
 // Variable global para modificar la velocidad del objeto Obstaculo 
 let speedObstacle = 2;
 let currentMissile = 0;
+
+// Ajustar la velocidad de los obstáculos en móviles
+if (document.body.classList.contains("is-mobile")) {
+  speedObstacle *= 0.7;
+}
 
 // Audios
 let startAudio = document.querySelector("#game-audio");
