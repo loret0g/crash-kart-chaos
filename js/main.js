@@ -76,6 +76,27 @@ lostLifeAudio.volume = 0.4;
 bonusInvulnerableAudio.volume = 0.4;
 winnerAudio.volume = 0.4;
 
+// Recalcular tamaño de pantalla
+window.addEventListener("resize", () => {
+  currentWidth = gameBoxNode.clientWidth;
+  // Vuelve a calcular baseWidth según si es móvil o no
+  const newBaseWidth = document.body.classList.contains("is-mobile") ? 900 : 1200;
+  scaleFactor = currentWidth / newBaseWidth;
+  console.log("Nuevo scaleFactor:", scaleFactor);
+});
+
+// Pantalla completa
+function requestFullScreen() {
+  const elem = document.documentElement;
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) { // Safari
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { // IE11
+    elem.msRequestFullscreen();
+  }
+}
+
 
 // ====== INICIO DE JUEGO ======
 function startGame() {
@@ -475,7 +496,11 @@ function clearAllIntervals() {
 }
 
 // ====== EVENTOS ======
-startBtnNode.addEventListener("click", startGame);
+startBtnNode.addEventListener("click", () => {
+  requestFullScreen();
+  startGame();
+});
+
 restartBtnNode.addEventListener("click", () => {
   clearAllIntervals();
 
