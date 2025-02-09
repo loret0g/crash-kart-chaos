@@ -25,9 +25,9 @@ let finalPoints = document.querySelector("#game-over-screen h2");
 // Define un ancho base para el escalado
 const baseWidth = document.body.classList.contains("is-mobile") ? 900 : 1200;
 // Ancho actual del contenedor del juego
-const currentWidth = gameBoxNode.clientWidth;
+let currentWidth = gameBoxNode.clientWidth;
 // Calculo del factor de escala
-const scaleFactor = currentWidth / baseWidth;
+let scaleFactor = currentWidth / baseWidth;
 
 // Objetos del game-box
 let player = null;

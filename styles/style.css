@@ -7,13 +7,19 @@
 }
 
 /* ====== BODY / HTML ====== */
-html, body {
+html,
+body {
   width: 100%;
   height: 100%;
   font-family: "Luckiest Guy", Arial, sans-serif;
   font-size: 16px;
   overflow: hidden;
   background-color: #0f1e46e2;
+  /* Evitar que se seleccionen los elementos: */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 /* ====== BOTONES ====== */
@@ -30,6 +36,7 @@ html, body {
   cursor: pointer;
   text-align: center;
 }
+
 .general-btn:hover {
   background-color: rgb(153, 38, 38);
 }
@@ -37,6 +44,7 @@ html, body {
 #restart-btn {
   background-color: rgb(0, 64, 128);
 }
+
 #restart-btn:hover {
   background-color: rgb(0, 51, 103);
 }
@@ -49,7 +57,8 @@ html, body {
   width: 100vw;
   height: 100vh;
 }
-#splash-screen > div {
+
+#splash-screen>div {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -73,7 +82,7 @@ html, body {
 
 /* ====== PANTALLA DE JUEGO ====== */
 #game-screen {
-  display: flex; 
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
@@ -92,23 +101,18 @@ html, body {
 
 #game-box-wrap {
   width: 90%;
-  max-width: 1200px; 
+  max-width: 1200px;
   aspect-ratio: 16 / 9;
   position: relative;
   overflow: hidden;
   margin: 0 auto;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 }
 
 #game-box {
   width: 100%;
   height: 100%;
   position: relative;
-  /* Evitar que se seleccionen los elementos: */
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
   /* FONDO */
   background-image: url("../images/fondo.png");
   background-position: center center;
@@ -136,22 +140,24 @@ html, body {
   background-color: #ffaa2a;
   border: 3px solid #FFF;
   border-radius: 10px;
-  box-shadow: inset 0 4px 8px rgba(0,0,0,0.5);
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.5);
   padding: 10px;
   margin: 10px;
   flex: 1;
 }
+
 .score div p {
   margin: 0;
   font-size: 16px;
 }
+
 .score .marcador {
   font-size: 1.5rem;
   color: #000;
-  background-color: rgba(255,255,255,0.8);
+  background-color: rgba(255, 255, 255, 0.8);
   border-radius: 5px;
   padding: 0.2rem 0.5rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 /* Botón mute */
@@ -161,11 +167,13 @@ html, body {
   cursor: pointer;
   padding: 0 0.5rem;
 }
+
 #mute-btn img {
   width: 30px;
   height: 30px;
   transition: transform 0.2s ease;
 }
+
 #mute-btn:hover img {
   transform: scale(1.1);
 }
@@ -184,7 +192,7 @@ html, body {
 }
 
 #game-over-screen .contenedor {
-  background-color: rgba(36,112,173,0.772);
+  background-color: rgba(36, 112, 173, 0.772);
   padding: 1rem;
   border-radius: 10px;
   width: 90%;
@@ -199,7 +207,7 @@ html, body {
 }
 
 #puntos-totales {
-  background-color: rgba(105,151,188,0.6);
+  background-color: rgba(105, 151, 188, 0.6);
   border-radius: 10px;
   padding: 5px 10px;
   text-align: center;
@@ -207,13 +215,15 @@ html, body {
   flex-direction: column;
   align-items: center;
 }
+
 #puntos-totales h1 {
   text-shadow: 1px 1px 3px #fff;
 }
+
 #puntos-totales h2 {
   color: #dfb733;
   font-size: 45px;
-  background-color: rgba(247,249,122,0.409);
+  background-color: rgba(247, 249, 122, 0.409);
   border-radius: 8px;
   padding: 5px;
   margin-top: 10px;
@@ -235,6 +245,7 @@ html, body {
   justify-content: center;
   align-items: flex-end;
 }
+
 #winner h1 {
   font-size: 2rem;
   background-color: #0277bfeb;
@@ -254,11 +265,12 @@ html, body {
 #rotate-device-alert {
   display: none;
   position: fixed;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   z-index: 9999;
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,0.85);
+  background: rgba(0, 0, 0, 0.85);
   color: #fff;
   font-size: 1.8rem;
   text-align: center;
@@ -272,6 +284,7 @@ html, body {
   body.is-mobile #rotate-device-alert {
     display: flex;
   }
+
   body.is-mobile #game-screen,
   body.is-mobile #splash-screen,
   body.is-mobile #game-over-screen,
@@ -284,7 +297,8 @@ html, body {
 @media screen and (max-width: 990px) and (orientation: landscape) {
   #game-screen {
     flex-direction: row;
-    align-items: stretch; /* Para que el contenedor del juego tome todo el alto */
+    align-items: stretch;
+    /* Para que el contenedor del juego tome todo el alto */
   }
 
   /* .game-centerer debe tomar el espacio sobrante */
@@ -292,7 +306,7 @@ html, body {
     flex: 1;
     display: flex;
     justify-content: center;
-    align-items: center; 
+    align-items: center;
   }
 
   /* #game-box-wrap ocupará todo el espacio vertical del .game-centerer */
@@ -315,17 +329,20 @@ html, body {
     flex-direction: row;
     z-index: 999;
   }
+
   .score div {
     margin: 5px;
     padding: 5px;
   }
+
   .score div img {
     max-height: 25px;
   }
+
   .score .marcador {
     font-size: 1rem;
   }
-  
+
   /* Imagen 'game over' pantalla final */
   .contenedor img {
     width: 250px;
@@ -355,7 +372,7 @@ html, body {
     transition: transform 0.1s ease, box-shadow 0.1s ease;
     cursor: pointer;
   }
-  
+
   /* Clase para simular el efecto de pulsado */
   .control-btn.pressed {
     transform: translateY(5px);
@@ -369,7 +386,8 @@ html, body {
     background: rgba(0, 0, 0, 0.3);
     border-radius: 50%;
     position: relative;
-    touch-action: none;  /* Evita que el navegador maneje gestos por defecto */
+    touch-action: none;
+    /* Evita que el navegador maneje gestos por defecto */
   }
 
   /* Elemento interno del joystick */
@@ -388,22 +406,26 @@ html, body {
 
 /* ========== PORTÁTIL (901px to 1199px) ========== */
 @media screen and (min-width: 901px) and (max-width: 1199px) {
+
   /* El .score => a la derecha en columna */
   #game-screen {
-    flex-direction: row; 
+    flex-direction: row;
   }
+
   .game-centerer {
     flex: 1;
     width: auto;
   }
+
   #game-box-wrap {
     width: 80%;
     max-width: 80%;
     aspect-ratio: 16/9;
     height: auto;
   }
+
   .score {
-    flex-direction: column; 
+    flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     width: 10%;
@@ -414,27 +436,32 @@ html, body {
 
 /* ========== DESKTOP (≥1200px) ========== */
 @media screen and (min-width: 1200px) {
+
   /* Score abajo */
   #game-screen {
     flex-direction: column;
   }
+
   .game-centerer {
     flex: 1;
     width: 100%;
     margin-top: 0.5rem;
   }
+
   #game-box-wrap {
     width: 90%;
     max-width: 1200px;
     aspect-ratio: 16 / 9;
     margin: 0 auto;
   }
+
   .score {
     width: 100%;
     margin: 0.5em auto;
     display: flex;
     flex-direction: row;
   }
+
   .score div {
     height: 6rem;
     display: flex;
