@@ -261,6 +261,11 @@ body {
   filter: drop-shadow(0 0px 16px #0277bf);
 }
 
+/* ====== Ocultar controles ====== */
+#controls-container.hidden {
+  display: none !important;
+}
+
 /* ====== AVISO GIRAR para disp. móviles ====== */
 #rotate-device-alert {
   display: none;

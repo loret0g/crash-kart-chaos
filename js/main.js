@@ -100,11 +100,15 @@ function requestFullScreen() {
 
 // ====== INICIO DE JUEGO ======
 function startGame() {
-  // Oculta pantallas e inicia
+  // Oculta/muestra pantallas e inicia
   splashScreenNode.style.display = "none";
   gameScreenNode.style.display = "flex";
   scoreNode.style.display = "flex";
-  controlsContainer.style.display = "flex";
+  // Mostrar controles solo en landscape:
+  if (window.innerWidth > window.innerHeight) {
+    controlsContainer.classList.remove("hidden");
+    controlsContainer.style.display = "flex";
+  }
 
   startAudio.currentTime = 0;
   startAudio.play();
